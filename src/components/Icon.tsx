@@ -6,9 +6,19 @@ export type IconName =
   | 'file' | 'flask' | 'chevronLeft' | 'play' | 'info' | 'calendar' | 'copy'
 
 const PATHS: Record<IconName, JSX.Element> = {
-  dumbbell: <><path d="M6.5 8v8M4 10v4M17.5 8v8M20 10v4M6.5 12h11" /></>,
+  dumbbell: <>
+    <rect x="2.4" y="8.6" width="3" height="6.8" rx="1.5" />
+    <rect x="6" y="6.2" width="3" height="11.6" rx="1.5" />
+    <path d="M9 12h6" />
+    <rect x="15" y="6.2" width="3" height="11.6" rx="1.5" />
+    <rect x="18.6" y="8.6" width="3" height="6.8" rx="1.5" />
+  </>,
   list: <><path d="M9 6h11M9 12h11M9 18h11" /><circle cx="4.5" cy="6" r="1" /><circle cx="4.5" cy="12" r="1" /><circle cx="4.5" cy="18" r="1" /></>,
-  chart: <><path d="M4 19V5M4 19h16" /><path d="M7 15l4-4 3 2 5-6" /></>,
+  chart: <>
+    <rect x="3.5" y="12" width="4" height="7" rx="1.4" />
+    <rect x="10" y="8" width="4" height="11" rx="1.4" />
+    <rect x="16.5" y="4.5" width="4" height="14.5" rx="1.4" />
+  </>,
   sliders: <><path d="M4 8h9M17 8h3M4 16h3M11 16h9" /><circle cx="15" cy="8" r="2" /><circle cx="9" cy="16" r="2" /></>,
   timer: <><circle cx="12" cy="14" r="8" /><path d="M12 14V9.5" /><path d="M9.5 2.5h5" /><path d="M12 2.5V6" /></>,
   check: <><path d="M5 12.5l4.5 4.5L19 7" /></>,
@@ -31,11 +41,11 @@ const PATHS: Record<IconName, JSX.Element> = {
 // Gefüllte Varianten (z.B. für aktiven Tab).
 const SOLID: Partial<Record<IconName, JSX.Element>> = {
   dumbbell: <>
-    <rect x="3" y="9" width="2.4" height="6" rx="1" />
-    <rect x="5.8" y="6.5" width="2.6" height="11" rx="1.3" />
-    <rect x="8.4" y="10.6" width="7.2" height="2.8" rx="1.2" />
-    <rect x="15.6" y="6.5" width="2.6" height="11" rx="1.3" />
-    <rect x="18.6" y="9" width="2.4" height="6" rx="1" />
+    <rect x="2.4" y="8.6" width="3" height="6.8" rx="1.5" />
+    <rect x="6" y="6.2" width="3" height="11.6" rx="1.5" />
+    <rect x="8.6" y="10.6" width="6.8" height="2.8" rx="1.4" />
+    <rect x="15" y="6.2" width="3" height="11.6" rx="1.5" />
+    <rect x="18.6" y="8.6" width="3" height="6.8" rx="1.5" />
   </>,
   list: <>
     <circle cx="4.5" cy="6" r="1.8" /><rect x="8" y="4.7" width="12" height="2.6" rx="1.3" />
@@ -43,9 +53,9 @@ const SOLID: Partial<Record<IconName, JSX.Element>> = {
     <circle cx="4.5" cy="18" r="1.8" /><rect x="8" y="16.7" width="12" height="2.6" rx="1.3" />
   </>,
   chart: <>
-    <rect x="4" y="12" width="3.6" height="7" rx="1.2" />
-    <rect x="10.2" y="8" width="3.6" height="11" rx="1.2" />
-    <rect x="16.4" y="4.5" width="3.6" height="14.5" rx="1.2" />
+    <rect x="3.5" y="12" width="4" height="7" rx="1.4" />
+    <rect x="10" y="8" width="4" height="11" rx="1.4" />
+    <rect x="16.5" y="4.5" width="4" height="14.5" rx="1.4" />
   </>,
   sliders: <>
     <rect x="3.5" y="7.1" width="17" height="1.9" rx="0.95" />

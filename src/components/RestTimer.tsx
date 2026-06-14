@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { Overlay } from './Overlay'
 
 interface Props {
   seconds: number
@@ -102,7 +103,7 @@ export function RestTimer({ seconds, onDismiss }: Props) {
   const offset = CIRC * (1 - progress)
 
   return (
-    <div className="overlay" onClick={(e) => e.target === e.currentTarget && onDismiss()}>
+    <Overlay onBackdrop={onDismiss}>
       <div className="timer-ring">
         <svg viewBox="0 0 260 260">
           <circle cx="130" cy="130" r={R} fill="none" stroke="var(--glass-border)" strokeWidth="12" />
@@ -138,6 +139,6 @@ export function RestTimer({ seconds, onDismiss }: Props) {
       <div className="hint" style={{ maxWidth: 300, textAlign: 'center' }}>
         Tipp: App im Vordergrund lassen – bei gesperrtem iPhone pausiert der Web-Timer.
       </div>
-    </div>
+    </Overlay>
   )
 }

@@ -33,10 +33,10 @@ export default function App() {
     <div className="app">
       {/* SVG-Filter für die Liquid-Glass-Refraktion (Brechung der Hintergrundkanten). */}
       <svg width="0" height="0" style={{ position: 'absolute' }} aria-hidden="true">
-        <filter id="lg-refraction" x="-20%" y="-20%" width="140%" height="140%">
-          <feTurbulence type="fractalNoise" baseFrequency="0.012 0.012" numOctaves="2" seed="11" result="noise" />
-          <feGaussianBlur in="noise" stdDeviation="1.5" result="softNoise" />
-          <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+        <filter id="lg-refraction" x="-25%" y="-25%" width="150%" height="150%" colorInterpolationFilters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.009 0.009" numOctaves="2" seed="11" result="noise" />
+          <feGaussianBlur in="noise" stdDeviation="1.2" result="softNoise" />
+          <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="26" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </svg>
       <Routes>

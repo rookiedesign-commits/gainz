@@ -15,14 +15,14 @@
   --text: #eaf2ff;
   --text-dim: #93a6c4;
 
-  --glass-fill-a: rgba(255, 255, 255, 0.10);
+  --glass-fill-a: rgba(255, 255, 255, 0.09);
   --glass-fill-b: rgba(255, 255, 255, 0.02);
-  --glass-spec: rgba(255, 255, 255, 0.22);
-  --glass-border: rgba(255, 255, 255, 0.16);
-  --glass-edge: rgba(255, 255, 255, 0.42);
-  --rim-a: rgba(255, 255, 255, 0.85);
-  --rim-b: rgba(255, 255, 255, 0.06);
-  --field-border: rgba(255, 255, 255, 0.22);
+  --glass-spec: rgba(255, 255, 255, 0.20);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-edge: rgba(255, 255, 255, 0.26);
+  --rim-a: rgba(255, 255, 255, 0.48);
+  --rim-b: rgba(255, 255, 255, 0.02);
+  --field-border: rgba(255, 255, 255, 0.13);
   --glass-shadow: 0 14px 44px rgba(0, 8, 24, 0.5);
 
   --radius: 22px;
@@ -111,28 +111,50 @@ a { color: inherit; text-decoration: none; }
     inset 0 1px 0 var(--glass-edge),
     inset 0 -12px 26px rgba(8, 20, 40, 0.16);
 }
-/* Liquid-Rim: heller, diagonal verlaufender Glasrand (gradient border via mask) */
+/* Liquid-Rim: feiner, diagonal verlaufender Glasrand (gradient border via mask) */
 .glass::after,
 .banner::after,
-.tabbar::after,
-.btn::after {
+.tabbar::after {
   content: '';
-  position: absolute; inset: 0; border-radius: inherit; padding: 1.2px;
-  background: linear-gradient(135deg, var(--rim-a), var(--rim-b) 38%, transparent 60%, var(--rim-a) 100%);
+  position: absolute; inset: 0; border-radius: inherit; padding: 1px;
+  background: linear-gradient(135deg, var(--rim-a), var(--rim-b) 42%, transparent 62%, var(--rim-a) 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
-  pointer-events: none; opacity: 0.9;
+  pointer-events: none; opacity: 0.75;
 }
 .glass-card { padding: 16px; margin-bottom: 14px; animation: cardIn 0.4s var(--ease-spring) both; }
 .glass-card.tap { transition: transform 0.14s ease; }
 .glass-card.tap:active { transform: scale(0.985); }
 
-/* Refraktion (Brechung) als progressive Verbesserung, wenn unterstützt */
-@supports (backdrop-filter: url(#lg-refraction)) or (-webkit-backdrop-filter: url(#lg-refraction)) {
-  .glass, .banner, .tabbar {
-    backdrop-filter: url(#lg-refraction) blur(11px) saturate(190%) brightness(1.07);
-    -webkit-backdrop-filter: url(#lg-refraction) blur(11px) saturate(190%) brightness(1.07);
-  }
+/* Aktiver Plan: Outline in Aktionsfarbe */
+.glass-card.active-plan {
+  box-shadow: var(--glass-shadow), inset 0 0 0 1.6px var(--action), 0 0 0 1px var(--action-glow);
+}
+
+/* Abgehakte Übung: Kachel neon überlagert, Felder gesperrt, kein Durchstreichen */
+.glass-card.done {
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--action) 20%, transparent), color-mix(in srgb, var(--action) 7%, transparent)),
+    linear-gradient(135deg, var(--glass-fill-a), var(--glass-fill-b));
+  box-shadow: var(--glass-shadow), inset 0 0 0 1.4px color-mix(in srgb, var(--action) 60%, transparent);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card.done .num-field,
+.glass-card.done .btn { opacity: 0.5; pointer-events: none; }
+.glass-card.done .ex-name { color: var(--text); }
+.done-tag {
+  flex: none; align-self: flex-start; padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  background: var(--action); color: var(--action-ink);
+}
+
+/* Refraktion (Brechung der Hintergrundkanten) – echtes Liquid-Glass.
+   Wird per Cascade gesetzt: Browser ohne url()-Support für backdrop-filter
+   (z.B. Chrome) verwerfen diese Deklaration und behalten den Blur oben;
+   Safari/iOS (iPhone-Ziel) wenden die Refraktion an. */
+.glass, .banner, .tabbar, .glass-card {
+  backdrop-filter: url(#lg-refraction) blur(8px) saturate(195%) brightness(1.07);
+  -webkit-backdrop-filter: url(#lg-refraction) blur(8px) saturate(195%) brightness(1.07);
 }
 
 .row { display: flex; align-items: center; gap: 12px; }
@@ -160,10 +182,8 @@ a { color: inherit; text-decoration: none; }
   color: var(--action-ink);
   box-shadow: 0 8px 22px var(--action-glow), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
-.btn-primary::after { --rim-a: rgba(255,255,255,0.55); --rim-b: rgba(255,255,255,0.05); opacity: 0.6; }
 .btn-primary:active { filter: brightness(0.97); }
 .btn-ghost { background: none; box-shadow: none; backdrop-filter: none; }
-.btn-ghost::after { display: none; }
 .btn-danger { color: var(--danger); }
 .btn-sm { padding: 9px 13px; border-radius: 13px; font-size: 14px; }
 .btn-icon { padding: 9px; border-radius: 12px; }
@@ -246,7 +266,6 @@ textarea.field { resize: vertical; min-height: 120px; font-family: ui-monospace,
 .check svg path { stroke-dasharray: 26; stroke-dashoffset: 26; }
 .check.on svg path { animation: draw 0.32s ease 0.05s forwards; }
 .ex-name { font-weight: 650; transition: color 0.25s ease; }
-.ex-name.done { color: var(--text-dim); text-decoration: line-through; }
 
 /* ===== Banner ===== */
 .banner {
@@ -269,8 +288,12 @@ textarea.field { resize: vertical; min-height: 120px; font-family: ui-monospace,
   position: fixed; inset: 0; z-index: 100;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 26px; padding: 24px;
-  background: rgba(4, 12, 28, 0.55);
-  backdrop-filter: blur(28px) saturate(160%); -webkit-backdrop-filter: blur(28px) saturate(160%);
+  /* Vollflächiger App-Hintergrund – der ganze Schirm wird zur Timer-Ansicht */
+  background: var(--bg-0);
+  background-image:
+    radial-gradient(55% 45% at 12% -5%, rgba(31, 116, 255, 0.42), transparent 60%),
+    radial-gradient(50% 40% at 100% 8%, rgba(22, 214, 255, 0.30), transparent 60%),
+    radial-gradient(60% 50% at 50% 112%, rgba(227, 255, 57, 0.12), transparent 60%);
   animation: fadeIn 0.25s ease both;
 }
 .timer-ring { position: relative; width: 260px; height: 260px; animation: popBig 0.4s var(--ease-spring) both; }

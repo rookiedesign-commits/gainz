@@ -29,9 +29,9 @@ export default function SettingsView() {
           name: 'Testtag',
           weekdays: allDays,
           exercises: [
-            { id: uid(), name: 'Brustpresse', targetSets: 3, targetReps: 10, restSeconds: 5, notes: 'Pause kurz zum Testen' },
-            { id: uid(), name: 'Latzug', targetSets: 3, targetReps: 10, restSeconds: 5 },
-            { id: uid(), name: 'Beinpresse', targetSets: 3, targetReps: 12, restSeconds: 5 },
+            { id: uid(), name: 'Brustpresse', targetSets: 3, targetReps: 10 },
+            { id: uid(), name: 'Latzug', targetSets: 3, targetReps: 10 },
+            { id: uid(), name: 'Beinpresse', targetSets: 3, targetReps: 12 },
           ],
         },
       ],
@@ -151,7 +151,7 @@ export default function SettingsView() {
       <div className="glass glass-card">
         <p className="hint" style={{ marginTop: 0 }}>
           Lädt einen Testplan, der an <strong>jedem</strong> Wochentag (also auch heute) trainierbar ist –
-          mit kurzer 5-Sekunden-Pause, damit du den Rest-Timer schnell siehst.
+          zum Ausprobieren aller Trainingsfunktionen.
         </p>
         <button className="btn btn-primary btn-block" onClick={loadTestPlan}>
           <Icon name="flask" size={18} /> Testplan laden & zu „Heute"

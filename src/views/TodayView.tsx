@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { getTodayStatus, getUpcoming, WEEKDAY_NAMES, WEEKDAY_NAMES_LONG } from '../lib/schedule'
 import { RestTimer } from '../components/RestTimer'
+import { Overlay } from '../components/Overlay'
 import { Icon } from '../components/Icon'
 
 const HYPE = [
@@ -126,17 +127,18 @@ export default function TodayView() {
             const entry = draft.entries.find((e) => e.exerciseId === ex.id)
             const done = entry?.done ?? false
             return (
-              <div key={ex.id} className="glass glass-card">
+              <div key={ex.id} className={`glass glass-card ${done ? 'done' : ''}`}>
                 <div className="row">
                   <button className={`check ${done ? 'on' : ''}`} onClick={() => toggleExercise(ex.id)} aria-label="abhaken">
                     <Icon name="check" size={18} strokeWidth={3} />
                   </button>
                   <div className="grow">
-                    <div className={`ex-name ${done ? 'done' : ''}`}>{ex.name}</div>
+                    <div className="ex-name">{ex.name}</div>
                     <div className="muted" style={{ fontSize: 13 }}>
                       {ex.targetSets} × {ex.targetReps} Wdh.{ex.notes ? ` · ${ex.notes}` : ''}
                     </div>
                   </div>
+                  {done && <span className="done-tag">erledigt</span>}
                 </div>
 
                 <div className="row" style={{ marginTop: 12, justifyContent: 'space-between' }}>
@@ -144,7 +146,7 @@ export default function TodayView() {
                     <div>
                       <span className="input-label">Gewicht (kg)</span>
                       <input
-                        className="num-field" type="number" inputMode="decimal" step="0.5"
+                        className="num-field" type="number" inputMode="decimal" step="0.5" disabled={done}
                         value={entry?.weight ?? ''} placeholder="–"
                         onChange={(e) => setEntryWeight(ex.id, e.target.value === '' ? undefined : Number(e.target.value))}
                       />
@@ -152,13 +154,13 @@ export default function TodayView() {
                     <div>
                       <span className="input-label">Wdh.</span>
                       <input
-                        className="num-field" type="number" inputMode="numeric"
+                        className="num-field" type="number" inputMode="numeric" disabled={done}
                         value={entry?.reps ?? ''} placeholder="–"
                         onChange={(e) => setEntryReps(ex.id, e.target.value === '' ? undefined : Number(e.target.value))}
                       />
                     </div>
                   </div>
-                  <button className="btn btn-sm" onClick={() => setRestSeconds(ex.restSeconds ?? restDefault)}>
+                  <button className="btn btn-sm" disabled={done} onClick={() => setRestSeconds(ex.restSeconds ?? restDefault)}>
                     <Icon name="timer" size={17} /> Pause
                   </button>
                 </div>
@@ -200,13 +202,13 @@ export default function TodayView() {
       {restSeconds != null && <RestTimer seconds={restSeconds} onDismiss={() => setRestSeconds(null)} />}
 
       {celebrate && (
-        <div className="overlay">
+        <Overlay>
           <div className="success-card">
             <SuccessCheck />
             <h2>Geschafft!</h2>
             <p>Stark gemacht, {settings.reminderName}.</p>
           </div>
-        </div>
+        </Overlay>
       )}
     </div>
   )

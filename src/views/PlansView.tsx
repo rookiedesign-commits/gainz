@@ -31,7 +31,7 @@ export default function PlansView() {
           const dayWeekdays = (d: { weekdays: number[] }) =>
             d.weekdays.map((w) => WEEKDAY_NAMES[w]).join(', ')
           return (
-            <div key={plan.id} className="glass glass-card">
+            <div key={plan.id} className={`glass glass-card ${active ? 'active-plan' : ''}`}>
               <div className="row-between">
                 <div className="grow">
                   <div className="row" style={{ gap: 8 }}>
