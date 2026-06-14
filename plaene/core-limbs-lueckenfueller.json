@@ -1,0 +1,24 @@
+{
+  "name": "Lückenfüller (optional)",
+  "description": "Optionale Zusatztage für Sa/So. Zwei Varianten wechseln sich ab: Arme-Tag und Schwachstellen-Tag. Als eigenen Plan aktivieren, wenn du Lust auf eine Extra-Einheit hast.",
+  "days": [
+    {
+      "name": "Arme-Tag",
+      "weekdays": [6, 0],
+      "exercises": [
+        { "name": "Bizeps (Curls)", "targetSets": 4, "targetReps": 12, "restSeconds": 75, "notes": "3-4 Sätze, 8-12 Wdh." },
+        { "name": "Trizeps", "targetSets": 4, "targetReps": 12, "restSeconds": 75, "notes": "3-4 Sätze, 8-12 Wdh." }
+      ]
+    },
+    {
+      "name": "Schwachstellen-Tag",
+      "weekdays": [6, 0],
+      "exercises": [
+        { "name": "Hinterer Schulteranteil (Reverse Fly)", "targetSets": 4, "targetReps": 15, "restSeconds": 60, "notes": "12-15 Wdh." },
+        { "name": "Waden", "targetSets": 4, "targetReps": 15, "restSeconds": 60, "notes": "12-15 Wdh." },
+        { "name": "Unterarme/Griff", "targetSets": 3, "targetReps": 15, "restSeconds": 60, "notes": "12-15 Wdh." },
+        { "name": "Bauch", "targetSets": 3, "targetReps": 15, "restSeconds": 60, "notes": "12-15 Wdh." }
+      ]
+    }
+  ]
+}

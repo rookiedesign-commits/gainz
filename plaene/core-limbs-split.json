@@ -1,0 +1,52 @@
+{
+  "name": "Core/Limbs Split",
+  "description": "Max. Muskelaufbau · Mo=Core A, Di=Limbs A, Do=Core B, Fr=Limbs B. Schwer trainieren, 1-2 Wdh. vor dem Versagen; oberes Wdh.-Ende in allen Sätzen geschafft -> Gewicht erhöhen.",
+  "days": [
+    {
+      "name": "Core A",
+      "weekdays": [1],
+      "exercises": [
+        { "name": "Bankdrücken", "targetSets": 4, "targetReps": 8, "restSeconds": 180, "notes": "6-8 Wdh." },
+        { "name": "Klimmzüge / Latzug", "targetSets": 4, "targetReps": 8, "restSeconds": 150, "notes": "6-8 Wdh." },
+        { "name": "Schrägbankdrücken (Hantel)", "targetSets": 3, "targetReps": 10, "restSeconds": 120, "notes": "8-10 Wdh." },
+        { "name": "Rudern (Kabel/Hantel)", "targetSets": 3, "targetReps": 10, "restSeconds": 120, "notes": "8-10 Wdh." },
+        { "name": "Cable Crunch", "targetSets": 3, "targetReps": 12, "restSeconds": 75, "notes": "10-12 Wdh." }
+      ]
+    },
+    {
+      "name": "Limbs A",
+      "weekdays": [2],
+      "exercises": [
+        { "name": "Kniebeuge", "targetSets": 4, "targetReps": 8, "restSeconds": 180, "notes": "6-8 Wdh." },
+        { "name": "Schulterdrücken", "targetSets": 4, "targetReps": 8, "restSeconds": 150, "notes": "6-8 Wdh." },
+        { "name": "Rumänisches Kreuzheben", "targetSets": 3, "targetReps": 10, "restSeconds": 150, "notes": "8-10 Wdh." },
+        { "name": "Seitheben", "targetSets": 3, "targetReps": 15, "restSeconds": 60, "notes": "12-15 Wdh., letzter Satz bis Versagen" },
+        { "name": "Bizeps-Curl (SZ/Kurzhantel)", "targetSets": 3, "targetReps": 10, "restSeconds": 90, "notes": "8-10 Wdh." },
+        { "name": "Trizeps-Pushdown", "targetSets": 3, "targetReps": 10, "restSeconds": 90, "notes": "8-10 Wdh., letzter Satz bis Versagen" }
+      ]
+    },
+    {
+      "name": "Core B",
+      "weekdays": [4],
+      "exercises": [
+        { "name": "Kreuzheben oder schweres Rudern", "targetSets": 4, "targetReps": 6, "restSeconds": 180, "notes": "5-6 Wdh." },
+        { "name": "Dips (beschwert) oder Brustpresse", "targetSets": 4, "targetReps": 8, "restSeconds": 150, "notes": "6-8 Wdh." },
+        { "name": "Breiter Latzug", "targetSets": 3, "targetReps": 10, "restSeconds": 120, "notes": "8-10 Wdh." },
+        { "name": "Brust-Fliegende (Kabel)", "targetSets": 3, "targetReps": 12, "restSeconds": 90, "notes": "10-12 Wdh." },
+        { "name": "Hanging Leg Raises", "targetSets": 3, "targetReps": 12, "restSeconds": 75, "notes": "8-12 Wdh." }
+      ]
+    },
+    {
+      "name": "Limbs B",
+      "weekdays": [5],
+      "exercises": [
+        { "name": "Beinpresse", "targetSets": 4, "targetReps": 10, "restSeconds": 150, "notes": "8-10 Wdh." },
+        { "name": "Ausfallschritte / Bulgarian Split Squat", "targetSets": 3, "targetReps": 10, "restSeconds": 120, "notes": "8-10 Wdh. pro Bein" },
+        { "name": "Arnold Press oder Schulterdrücken", "targetSets": 4, "targetReps": 8, "restSeconds": 150, "notes": "6-8 Wdh." },
+        { "name": "Hammer-Curl", "targetSets": 3, "targetReps": 10, "restSeconds": 90, "notes": "8-10 Wdh." },
+        { "name": "Trizeps über Kopf (Kabel)", "targetSets": 3, "targetReps": 10, "restSeconds": 90, "notes": "8-10 Wdh., letzter Satz bis Versagen" },
+        { "name": "Seitheben", "targetSets": 3, "targetReps": 15, "restSeconds": 60, "notes": "12-15 Wdh., letzter Satz bis Versagen" }
+      ]
+    }
+  ]
+}
