@@ -1,0 +1,33 @@
+{
+  "name": "Push-Pull-Fullbody",
+  "description": "3er-Split, Mo/Mi/Fr",
+  "days": [
+    {
+      "name": "Push",
+      "weekdays": [1],
+      "exercises": [
+        { "name": "Brustpresse", "targetSets": 3, "targetReps": 10, "restSeconds": 120 },
+        { "name": "Schulterdrücken", "targetSets": 3, "targetReps": 10, "restSeconds": 120 },
+        { "name": "Trizeps-Pushdown", "targetSets": 3, "targetReps": 12, "restSeconds": 90 }
+      ]
+    },
+    {
+      "name": "Pull",
+      "weekdays": [3],
+      "exercises": [
+        { "name": "Latzug", "targetSets": 3, "targetReps": 10, "restSeconds": 120 },
+        { "name": "Rudern am Kabel", "targetSets": 3, "targetReps": 10, "restSeconds": 120 },
+        { "name": "Bizeps-Curls", "targetSets": 3, "targetReps": 12, "restSeconds": 90 }
+      ]
+    },
+    {
+      "name": "Fullbody",
+      "weekdays": [5],
+      "exercises": [
+        { "name": "Kniebeuge", "targetSets": 4, "targetReps": 8, "restSeconds": 150 },
+        { "name": "Brustpresse", "targetSets": 3, "targetReps": 10, "restSeconds": 120 },
+        { "name": "Latzug", "targetSets": 3, "targetReps": 10, "restSeconds": 120 }
+      ]
+    }
+  ]
+}
