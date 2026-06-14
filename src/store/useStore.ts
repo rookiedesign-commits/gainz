@@ -16,6 +16,7 @@ interface StoreState extends AppData {
 
   // Pläne
   addPlan: (plan: Plan) => void
+  updatePlan: (plan: Plan) => void
   removePlan: (id: string) => void
   setActivePlan: (id: string) => void
 
@@ -64,6 +65,15 @@ export const useStore = create<StoreState>()(
           plans: [...s.plans, plan],
           // Erster Plan wird automatisch aktiv.
           activePlanId: s.activePlanId ?? plan.id,
+        })),
+
+      updatePlan: (plan) =>
+        set((s) => ({
+          plans: s.plans.map((p) => (p.id === plan.id ? plan : p)),
+          // Beim Bearbeiten des aktiven Plans Tageszeiger/Entwurf zurücksetzen,
+          // damit "Heute" wieder konsistent zur neuen Tagesreihenfolge ist.
+          schedulePointer: plan.id === s.activePlanId ? 0 : s.schedulePointer,
+          draft: plan.id === s.activePlanId ? null : s.draft,
         })),
 
       removePlan: (id) =>

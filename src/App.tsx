@@ -5,6 +5,7 @@ import { TabBar } from './components/TabBar'
 import TodayView from './views/TodayView'
 import PlansView from './views/PlansView'
 import ImportPlanView from './views/ImportPlanView'
+import EditPlanView from './views/EditPlanView'
 import ProgressView from './views/ProgressView'
 import SettingsView from './views/SettingsView'
 
@@ -33,6 +34,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<TodayView />} />
         <Route path="/plans" element={<PlansView />} />
+        <Route path="/plans/new" element={<EditPlanView />} />
+        <Route path="/plans/edit/:id" element={<EditPlanView />} />
         <Route path="/plans/import" element={<ImportPlanView />} />
         <Route path="/progress" element={<ProgressView />} />
         <Route path="/settings" element={<SettingsView />} />

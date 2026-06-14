@@ -1,13 +1,44 @@
 import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useStore, snapshot } from '../store/useStore'
-import type { ThemeMode } from '../types'
+import { uid } from '../lib/id'
+import type { Plan, ThemeMode } from '../types'
 
 export default function SettingsView() {
   const settings = useStore((s) => s.settings)
   const updateSettings = useStore((s) => s.updateSettings)
   const replaceAll = useStore((s) => s.replaceAll)
+  const addPlan = useStore((s) => s.addPlan)
+  const setActivePlan = useStore((s) => s.setActivePlan)
+  const navigate = useNavigate()
   const fileRef = useRef<HTMLInputElement>(null)
   const [msg, setMsg] = useState<string | null>(null)
+
+  // Testplan: an JEDEM Wochentag trainierbar (also auch heute), zum Ausprobieren.
+  const loadTestPlan = () => {
+    const allDays = [0, 1, 2, 3, 4, 5, 6]
+    const plan: Plan = {
+      id: uid(),
+      name: 'Testtag (jeden Tag)',
+      description: 'Zum Ausprobieren der Trainingsfunktionen – heute aktiv.',
+      createdAt: new Date().toISOString(),
+      days: [
+        {
+          id: uid(),
+          name: 'Testtag',
+          weekdays: allDays,
+          exercises: [
+            { id: uid(), name: 'Brustpresse', targetSets: 3, targetReps: 10, restSeconds: 5, notes: 'Pause kurz zum Testen' },
+            { id: uid(), name: 'Latzug', targetSets: 3, targetReps: 10, restSeconds: 5 },
+            { id: uid(), name: 'Beinpresse', targetSets: 3, targetReps: 12, restSeconds: 5 },
+          ],
+        },
+      ],
+    }
+    addPlan(plan)
+    setActivePlan(plan.id)
+    navigate('/')
+  }
 
   const restMin = Math.floor(settings.restDefaultSeconds / 60)
   const restSec = settings.restDefaultSeconds % 60
@@ -111,6 +142,15 @@ export default function SettingsView() {
           </label>
         </div>
         {msg && <div className="hint" style={{ marginTop: 10 }}>{msg}</div>}
+      </div>
+
+      <div className="section-label">Test & Demo</div>
+      <div className="glass glass-card">
+        <p className="hint" style={{ marginTop: 0 }}>
+          Lädt einen Testplan, der an <strong>jedem</strong> Wochentag (also auch heute) trainierbar ist –
+          mit kurzer 5-Sekunden-Pause, damit du den Rest-Timer schnell siehst.
+        </p>
+        <button className="btn btn-primary btn-block" onClick={loadTestPlan}>🧪 Testplan laden & zu „Heute"</button>
       </div>
 
       <div className="section-label">Über</div>

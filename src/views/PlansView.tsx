@@ -12,8 +12,11 @@ export default function PlansView() {
     <div>
       <h1 className="view-title">Pläne</h1>
 
-      <Link to="/plans/import" className="btn btn-primary btn-block" style={{ marginBottom: 18 }}>
+      <Link to="/plans/import" className="btn btn-primary btn-block" style={{ marginBottom: 10 }}>
         ✨ Plan von Claude importieren
+      </Link>
+      <Link to="/plans/new" className="btn btn-block" style={{ marginBottom: 18 }}>
+        ＋ Plan selbst anlegen
       </Link>
 
       {plans.length === 0 ? (
@@ -59,6 +62,9 @@ export default function PlansView() {
                     Aktivieren
                   </button>
                 )}
+                <Link to={`/plans/edit/${plan.id}`} className="btn btn-sm grow" style={{ textAlign: 'center' }}>
+                  Bearbeiten
+                </Link>
                 <button
                   className="btn btn-sm btn-ghost btn-danger"
                   onClick={() => {

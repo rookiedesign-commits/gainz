@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import type { Plan } from '../types'
+import { uid } from './id'
 
 /**
  * Schema für von Claude importierte Pläne. Bewusst tolerant beim Input
@@ -26,10 +27,6 @@ export const importPlanSchema = z.object({
 })
 
 export type ImportPlan = z.infer<typeof importPlanSchema>
-
-function uid(): string {
-  return Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4)
-}
 
 /** Validiert rohen JSON-Text und baut einen vollständigen Plan (mit IDs). */
 export function parsePlanJSON(raw: string): { plan: Plan } | { error: string } {
