@@ -5,6 +5,16 @@ import { uid } from '../lib/id'
 import { Icon } from '../components/Icon'
 import type { Plan, ThemeMode } from '../types'
 
+/** Build-Zeit lesbar machen (Datum + Uhrzeit, lokal). */
+function formatBuild(iso: string): string {
+  try {
+    const d = new Date(iso)
+    return d.toLocaleString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+  } catch {
+    return iso
+  }
+}
+
 export default function SettingsView() {
   const settings = useStore((s) => s.settings)
   const updateSettings = useStore((s) => s.updateSettings)
@@ -161,8 +171,10 @@ export default function SettingsView() {
       <div className="section-label">Über</div>
       <div className="glass glass-card">
         <p className="hint" style={{ margin: 0 }}>
-          Fitness PWA · v0.1 · Erinnerungs-Push folgt in einer späteren Version.
-          Für den Satz-Timer die App im Vordergrund lassen.
+          Gainz · PWA · Erinnerungs-Push folgt später. Für den Satz-Timer die App im Vordergrund lassen.
+        </p>
+        <p className="hint" style={{ margin: '8px 0 0', opacity: 0.7 }}>
+          Build: {formatBuild(__BUILD_TIME__)}
         </p>
       </div>
     </div>

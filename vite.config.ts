@@ -6,6 +6,10 @@ import { VitePWA } from 'vite-plugin-pwa'
 // ohne dass der Repo-Name hart kodiert werden muss. Mit HashRouter gibt es kein 404.
 export default defineConfig({
   base: './',
+  // Build-Zeitstempel zur Versionskontrolle (wird in "Mehr" angezeigt).
+  define: {
+    __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
+  },
   plugins: [
     react(),
     VitePWA({

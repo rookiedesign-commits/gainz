@@ -56,9 +56,8 @@
 
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
-/* Scrollbalken-Platz immer reservieren -> Viewport-Breite konstant,
-   damit die fixierte Tab-Leiste nicht je nach Seiteninhalt springt. */
-html { scrollbar-gutter: stable; overflow-y: scroll; }
+/* Scrollbalken-Platz reservieren -> Viewport-Breite konstant (kein seitliches Springen). */
+html { scrollbar-gutter: stable; }
 
 body {
   margin: 0;
