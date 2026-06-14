@@ -1,4 +1,3 @@
-import { createPortal } from 'react-dom'
 import { NavLink, useLocation } from 'react-router-dom'
 import { Icon, type IconName } from './Icon'
 
@@ -16,9 +15,8 @@ export function TabBar() {
     tabs.findIndex((t) => (t.to === '/' ? pathname === '/' : pathname.startsWith(t.to)))
   )
 
-  // Per Portal an <body>, damit kein Eltern-Container mit transform/backdrop-filter
-  // die fixed-Positionierung einfängt (sonst springt die Leiste je nach Seiteninhalt).
-  return createPortal(
+  // Fester Teil des App-Shell-Layouts (kein position:fixed) -> kann nicht springen.
+  return (
     <nav className="tabbar">
       <div className="tab-indicator" style={{ transform: `translateX(${activeIndex * 100}%)` }} />
       {tabs.map((t, i) => (
@@ -26,7 +24,6 @@ export function TabBar() {
           <Icon name={t.icon} size={25} className="tab-ico" filled={i === activeIndex} />
         </NavLink>
       ))}
-    </nav>,
-    document.body
+    </nav>
   )
 }

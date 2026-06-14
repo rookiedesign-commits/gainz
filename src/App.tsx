@@ -39,16 +39,18 @@ export default function App() {
           <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="26" xChannelSelector="R" yChannelSelector="G" />
         </filter>
       </svg>
-      <Routes>
-        <Route path="/" element={<TodayView />} />
-        <Route path="/plans" element={<PlansView />} />
-        <Route path="/plans/new" element={<EditPlanView />} />
-        <Route path="/plans/edit/:id" element={<EditPlanView />} />
-        <Route path="/plans/import" element={<ImportPlanView />} />
-        <Route path="/progress" element={<ProgressView />} />
-        <Route path="/settings" element={<SettingsView />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <main className="content">
+        <Routes>
+          <Route path="/" element={<TodayView />} />
+          <Route path="/plans" element={<PlansView />} />
+          <Route path="/plans/new" element={<EditPlanView />} />
+          <Route path="/plans/edit/:id" element={<EditPlanView />} />
+          <Route path="/plans/import" element={<ImportPlanView />} />
+          <Route path="/progress" element={<ProgressView />} />
+          <Route path="/settings" element={<SettingsView />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </main>
       <TabBar />
     </div>
   )
