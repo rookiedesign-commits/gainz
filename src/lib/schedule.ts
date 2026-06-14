@@ -37,6 +37,8 @@ export interface TodayStatus {
   day: TrainingDay | null
   /** Wurde heute bereits abgeschlossen oder verschoben? */
   resolvedToday: boolean
+  /** Falls erledigt: war es abgeschlossen oder verschoben? */
+  resolvedKind: 'done' | 'postponed' | null
   todayWeekday: number
 }
 
@@ -44,14 +46,15 @@ export function getTodayStatus(data: AppData, now: Date = new Date()): TodayStat
   const plan = getActivePlan(data)
   const todayWeekday = now.getDay()
   if (!plan || plan.days.length === 0) {
-    return { plan, isTrainingWeekday: false, day: null, resolvedToday: false, todayWeekday }
+    return { plan, isTrainingWeekday: false, day: null, resolvedToday: false, resolvedKind: null, todayWeekday }
   }
   const isTrainingWeekday = trainingWeekdays(plan).has(todayWeekday)
   const day = isTrainingWeekday ? dayAtPointer(plan, data.schedulePointer) : null
   // "Heute erledigt" gilt nur, wenn es für GENAU diesen aktiven Plan war.
   const resolvedToday =
     data.lastResolvedDate === todayISO(now) && data.lastResolvedPlanId === plan.id
-  return { plan, isTrainingWeekday, day, resolvedToday, todayWeekday }
+  const resolvedKind = resolvedToday ? data.lastResolvedKind : null
+  return { plan, isTrainingWeekday, day, resolvedToday, resolvedKind, todayWeekday }
 }
 
 export interface UpcomingItem {

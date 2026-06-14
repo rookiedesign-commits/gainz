@@ -58,6 +58,7 @@ export const useStore = create<StoreState>()(
       schedulePointer: 0,
       lastResolvedDate: null,
       lastResolvedPlanId: null,
+      lastResolvedKind: null,
       settings: defaultSettings,
       draft: null,
 
@@ -91,6 +92,7 @@ export const useStore = create<StoreState>()(
             draft: wasActive ? null : s.draft,
             lastResolvedDate: wasActive ? null : s.lastResolvedDate,
             lastResolvedPlanId: wasActive ? null : s.lastResolvedPlanId,
+            lastResolvedKind: wasActive ? null : s.lastResolvedKind,
           }
         }),
 
@@ -172,13 +174,19 @@ export const useStore = create<StoreState>()(
           schedulePointer: s.schedulePointer + 1,
           lastResolvedDate: todayISO(),
           lastResolvedPlanId: s.draft.planId,
+          lastResolvedKind: 'done',
           draft: null,
         })
       },
 
       // Verschieben: Pointer bleibt → gleiche Einheit erscheint am nächsten Trainingstag.
       postponeToday: () =>
-        set((s) => ({ lastResolvedDate: todayISO(), lastResolvedPlanId: s.activePlanId, draft: null })),
+        set((s) => ({
+          lastResolvedDate: todayISO(),
+          lastResolvedPlanId: s.activePlanId,
+          lastResolvedKind: 'postponed',
+          draft: null,
+        })),
 
       discardDraft: () => set({ draft: null }),
 
@@ -192,6 +200,7 @@ export const useStore = create<StoreState>()(
           schedulePointer: data.schedulePointer ?? 0,
           lastResolvedDate: data.lastResolvedDate ?? null,
           lastResolvedPlanId: data.lastResolvedPlanId ?? null,
+          lastResolvedKind: data.lastResolvedKind ?? null,
           settings: { ...defaultSettings, ...(data.settings ?? {}) },
           draft: null,
         }),
@@ -206,6 +215,7 @@ export const useStore = create<StoreState>()(
         schedulePointer: s.schedulePointer,
         lastResolvedDate: s.lastResolvedDate,
         lastResolvedPlanId: s.lastResolvedPlanId,
+        lastResolvedKind: s.lastResolvedKind,
         settings: s.settings,
         draft: s.draft,
       }),
@@ -222,6 +232,7 @@ export function snapshot(s: StoreState): AppData {
     schedulePointer: s.schedulePointer,
     lastResolvedDate: s.lastResolvedDate,
     lastResolvedPlanId: s.lastResolvedPlanId,
+    lastResolvedKind: s.lastResolvedKind,
     settings: s.settings,
   }
 }

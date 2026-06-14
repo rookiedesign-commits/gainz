@@ -65,5 +65,7 @@ export interface AppData {
   lastResolvedDate: string | null
   /** Plan, für den zuletzt abgeschlossen/verschoben wurde – bindet "heute erledigt" an den Plan. */
   lastResolvedPlanId: string | null
+  /** Art des heutigen Abschlusses: abgeschlossen oder verschoben. */
+  lastResolvedKind: 'done' | 'postponed' | null
   settings: Settings
 }

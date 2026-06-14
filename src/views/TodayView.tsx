@@ -37,6 +37,7 @@ export default function TodayView() {
     () => getUpcoming(data, 4),
     [data.activePlanId, data.schedulePointer, data.plans, data.lastResolvedDate]
   )
+  const next = upcoming[0]
 
   const startDraft = useStore((s) => s.startDraft)
   const toggleExercise = useStore((s) => s.toggleExercise)
@@ -95,6 +96,21 @@ export default function TodayView() {
             <div>
               <h2>{status.day.name} — {hypeFor(new Date().toDateString())}</h2>
               <p>{todayName} · {status.day.exercises.length} Übungen · Du schaffst das, {settings.reminderName}!</p>
+            </div>
+          </div>
+        </div>
+      ) : status.resolvedKind === 'postponed' ? (
+        <div className="banner banner-postponed">
+          <div className="row">
+            <Icon name="calendar" size={26} className="b-ico" />
+            <div>
+              <h2>Heute übersprungen</h2>
+              <p>
+                Kein Stress, {settings.reminderName}.{' '}
+                {next
+                  ? <>Dein <strong>{next.dayName}</strong> wandert auf <strong>{formatLong(next)}</strong>.</>
+                  : 'Die Einheit rückt auf deinen nächsten Trainingstag.'}
+              </p>
             </div>
           </div>
         </div>
@@ -217,4 +233,8 @@ export default function TodayView() {
 function formatShort(iso: string): string {
   const parts = iso.split('-')
   return `${Number(parts[2])}.${Number(parts[1])}.`
+}
+
+function formatLong(u: { date: string; weekday: number }): string {
+  return `${WEEKDAY_NAMES_LONG[u.weekday]}, ${formatShort(u.date)}`
 }
