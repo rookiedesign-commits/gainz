@@ -6,7 +6,13 @@ import { LineChart } from '../components/LineChart'
 type Metric = 'weight' | 'volume'
 
 export default function ProgressView() {
-  const logs = useStore((s) => s.logs)
+  const allLogs = useStore((s) => s.logs)
+  const activePlanId = useStore((s) => s.activePlanId)
+  // Nur die Progression des aktiven Plans zeigen.
+  const logs = useMemo(
+    () => allLogs.filter((l) => l.planId === activePlanId),
+    [allLogs, activePlanId]
+  )
   const names = useMemo(() => trackedExerciseNames(logs), [logs])
   const [selected, setSelected] = useState<string | null>(null)
   const [metric, setMetric] = useState<Metric>('weight')

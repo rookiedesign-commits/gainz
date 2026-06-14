@@ -69,7 +69,7 @@ export function LineChart({ points, unit = '' }: Props) {
         <path className="line" d={linePath} fill="none" stroke="url(#line)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
         {points.map((p, i) => (
-          <circle key={i} cx={x(i)} cy={y(p.value)} r={i === n - 1 ? 5.5 : 3} fill={i === n - 1 ? 'var(--neon)' : 'var(--cyan)'} stroke="var(--bg-0)" strokeWidth="1.5" />
+          <circle key={i} cx={x(i)} cy={y(p.value)} r={i === n - 1 ? 5.5 : 3} fill={i === n - 1 ? 'var(--action)' : 'var(--cyan)'} stroke="var(--bg-0)" strokeWidth="1.5" />
         ))}
 
         {/* Y-Extrema */}

@@ -48,7 +48,9 @@ export function getTodayStatus(data: AppData, now: Date = new Date()): TodayStat
   }
   const isTrainingWeekday = trainingWeekdays(plan).has(todayWeekday)
   const day = isTrainingWeekday ? dayAtPointer(plan, data.schedulePointer) : null
-  const resolvedToday = data.lastResolvedDate === todayISO(now)
+  // "Heute erledigt" gilt nur, wenn es für GENAU diesen aktiven Plan war.
+  const resolvedToday =
+    data.lastResolvedDate === todayISO(now) && data.lastResolvedPlanId === plan.id
   return { plan, isTrainingWeekday, day, resolvedToday, todayWeekday }
 }
 

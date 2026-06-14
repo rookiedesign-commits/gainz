@@ -28,15 +28,52 @@ const PATHS: Record<IconName, JSX.Element> = {
   copy: <><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h8" /></>,
 }
 
+// Gefüllte Varianten (z.B. für aktiven Tab).
+const SOLID: Partial<Record<IconName, JSX.Element>> = {
+  dumbbell: <>
+    <rect x="3" y="9" width="2.4" height="6" rx="1" />
+    <rect x="5.8" y="6.5" width="2.6" height="11" rx="1.3" />
+    <rect x="8.4" y="10.6" width="7.2" height="2.8" rx="1.2" />
+    <rect x="15.6" y="6.5" width="2.6" height="11" rx="1.3" />
+    <rect x="18.6" y="9" width="2.4" height="6" rx="1" />
+  </>,
+  list: <>
+    <circle cx="4.5" cy="6" r="1.8" /><rect x="8" y="4.7" width="12" height="2.6" rx="1.3" />
+    <circle cx="4.5" cy="12" r="1.8" /><rect x="8" y="10.7" width="12" height="2.6" rx="1.3" />
+    <circle cx="4.5" cy="18" r="1.8" /><rect x="8" y="16.7" width="12" height="2.6" rx="1.3" />
+  </>,
+  chart: <>
+    <rect x="4" y="12" width="3.6" height="7" rx="1.2" />
+    <rect x="10.2" y="8" width="3.6" height="11" rx="1.2" />
+    <rect x="16.4" y="4.5" width="3.6" height="14.5" rx="1.2" />
+  </>,
+  sliders: <>
+    <rect x="3.5" y="7.1" width="17" height="1.9" rx="0.95" />
+    <circle cx="15" cy="8" r="3.1" />
+    <rect x="3.5" y="15.1" width="17" height="1.9" rx="0.95" />
+    <circle cx="9" cy="16" r="3.1" />
+  </>,
+}
+
 interface Props {
   name: IconName
   size?: number
   className?: string
   style?: CSSProperties
   strokeWidth?: number
+  filled?: boolean
 }
 
-export function Icon({ name, size = 22, className, style, strokeWidth = 1.8 }: Props) {
+export function Icon({ name, size = 22, className, style, strokeWidth = 1.8, filled = false }: Props) {
+  const solid = filled ? SOLID[name] : undefined
+  if (solid) {
+    return (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" stroke="none"
+        className={className} style={style} aria-hidden="true">
+        {solid}
+      </svg>
+    )
+  }
   return (
     <svg
       width={size} height={size} viewBox="0 0 24 24" fill="none"

@@ -63,5 +63,7 @@ export interface AppData {
   schedulePointer: number
   /** ISO-Datum des zuletzt erfassten/verschobenen Trainingstags (verhindert Doppelzählung). */
   lastResolvedDate: string | null
+  /** Plan, für den zuletzt abgeschlossen/verschoben wurde – bindet "heute erledigt" an den Plan. */
+  lastResolvedPlanId: string | null
   settings: Settings
 }

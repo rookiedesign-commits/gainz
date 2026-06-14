@@ -57,6 +57,7 @@ export const useStore = create<StoreState>()(
       logs: [],
       schedulePointer: 0,
       lastResolvedDate: null,
+      lastResolvedPlanId: null,
       settings: defaultSettings,
       draft: null,
 
@@ -79,9 +80,18 @@ export const useStore = create<StoreState>()(
       removePlan: (id) =>
         set((s) => {
           const plans = s.plans.filter((p) => p.id !== id)
-          const activePlanId =
-            s.activePlanId === id ? (plans[0]?.id ?? null) : s.activePlanId
-          return { plans, activePlanId, schedulePointer: s.activePlanId === id ? 0 : s.schedulePointer }
+          const wasActive = s.activePlanId === id
+          const activePlanId = wasActive ? (plans[0]?.id ?? null) : s.activePlanId
+          return {
+            plans,
+            activePlanId,
+            // Logs/Progression des gelöschten Plans mit entfernen.
+            logs: s.logs.filter((l) => l.planId !== id),
+            schedulePointer: wasActive ? 0 : s.schedulePointer,
+            draft: wasActive ? null : s.draft,
+            lastResolvedDate: wasActive ? null : s.lastResolvedDate,
+            lastResolvedPlanId: wasActive ? null : s.lastResolvedPlanId,
+          }
         }),
 
       setActivePlan: (id) =>
@@ -161,12 +171,14 @@ export const useStore = create<StoreState>()(
           logs: [...s.logs, log],
           schedulePointer: s.schedulePointer + 1,
           lastResolvedDate: todayISO(),
+          lastResolvedPlanId: s.draft.planId,
           draft: null,
         })
       },
 
       // Verschieben: Pointer bleibt → gleiche Einheit erscheint am nächsten Trainingstag.
-      postponeToday: () => set({ lastResolvedDate: todayISO(), draft: null }),
+      postponeToday: () =>
+        set((s) => ({ lastResolvedDate: todayISO(), lastResolvedPlanId: s.activePlanId, draft: null })),
 
       discardDraft: () => set({ draft: null }),
 
@@ -179,6 +191,7 @@ export const useStore = create<StoreState>()(
           logs: data.logs ?? [],
           schedulePointer: data.schedulePointer ?? 0,
           lastResolvedDate: data.lastResolvedDate ?? null,
+          lastResolvedPlanId: data.lastResolvedPlanId ?? null,
           settings: { ...defaultSettings, ...(data.settings ?? {}) },
           draft: null,
         }),
@@ -192,6 +205,7 @@ export const useStore = create<StoreState>()(
         logs: s.logs,
         schedulePointer: s.schedulePointer,
         lastResolvedDate: s.lastResolvedDate,
+        lastResolvedPlanId: s.lastResolvedPlanId,
         settings: s.settings,
         draft: s.draft,
       }),
@@ -207,6 +221,7 @@ export function snapshot(s: StoreState): AppData {
     logs: s.logs,
     schedulePointer: s.schedulePointer,
     lastResolvedDate: s.lastResolvedDate,
+    lastResolvedPlanId: s.lastResolvedPlanId,
     settings: s.settings,
   }
 }

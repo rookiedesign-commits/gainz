@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icons/apple-touch-icon.png'],
       manifest: {
-        name: 'Fitness',
-        short_name: 'Fitness',
+        name: 'Gainz',
+        short_name: 'Gainz',
         description: 'Persönlicher Trainings-Tracker',
         theme_color: '#04101f',
         background_color: '#04101f',
