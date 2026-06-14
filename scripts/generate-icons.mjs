@@ -9,9 +9,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const OUT = resolve(__dirname, '../public/icons')
 mkdirSync(OUT, { recursive: true })
 
-const C1 = [0x5b, 0x8c, 0xff] // accent
-const C2 = [0x9b, 0x6b, 0xff] // accent-2
-const BG = [0x0b, 0x0f, 0x1a]
+const C1 = [0x1f, 0x74, 0xff] // Curaçao-Blau
+const C2 = [0x16, 0xd6, 0xff] // Cyan
+const PLATE = [0xe3, 0xff, 0x39] // Neongelb (Hantel)
 
 function lerp(a, b, t) {
   return [
@@ -43,10 +43,9 @@ function render(size, { pad = 0 } = {}) {
   const inset = pad
   const cx = s / 2
   const cy = s / 2
-  const white = [0xff, 0xff, 0xff]
   const fillRect = (x0, y0, w, h) => {
     for (let y = Math.round(y0); y < Math.round(y0 + h); y++)
-      for (let x = Math.round(x0); x < Math.round(x0 + w); x++) set(x, y, white)
+      for (let x = Math.round(x0); x < Math.round(x0 + w); x++) set(x, y, PLATE)
   }
   const usable = s - inset * 2
   const barLen = usable * 0.5

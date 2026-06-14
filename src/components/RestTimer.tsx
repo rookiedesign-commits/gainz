@@ -102,14 +102,14 @@ export function RestTimer({ seconds, onDismiss }: Props) {
   const offset = CIRC * (1 - progress)
 
   return (
-    <div className="timer-overlay" onClick={(e) => e.target === e.currentTarget && onDismiss()}>
+    <div className="overlay" onClick={(e) => e.target === e.currentTarget && onDismiss()}>
       <div className="timer-ring">
         <svg viewBox="0 0 260 260">
           <circle cx="130" cy="130" r={R} fill="none" stroke="var(--glass-border)" strokeWidth="12" />
           <defs>
             <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="var(--accent)" />
-              <stop offset="100%" stopColor="var(--accent-2)" />
+              <stop offset="0%" stopColor="var(--cyan)" />
+              <stop offset="100%" stopColor="var(--blue)" />
             </linearGradient>
           </defs>
           <circle
@@ -120,7 +120,7 @@ export function RestTimer({ seconds, onDismiss }: Props) {
         </svg>
         <div className="timer-num">
           <div className="big">{done ? 'Los!' : fmt(remaining)}</div>
-          <div className="sub">{done ? 'Pause vorbei 💪' : 'Satzpause'}</div>
+          <div className="sub">{done ? 'Pause vorbei' : 'Satzpause'}</div>
         </div>
       </div>
 

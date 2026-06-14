@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { WEEKDAY_NAMES } from '../lib/schedule'
+import { Icon } from '../components/Icon'
 
 export default function PlansView() {
   const plans = useStore((s) => s.plans)
@@ -9,14 +10,14 @@ export default function PlansView() {
   const removePlan = useStore((s) => s.removePlan)
 
   return (
-    <div>
+    <div className="view">
       <h1 className="view-title">Pläne</h1>
 
       <Link to="/plans/import" className="btn btn-primary btn-block" style={{ marginBottom: 10 }}>
-        ✨ Plan von Claude importieren
+        <Icon name="sparkles" size={18} /> Plan von Claude importieren
       </Link>
       <Link to="/plans/new" className="btn btn-block" style={{ marginBottom: 18 }}>
-        ＋ Plan selbst anlegen
+        <Icon name="plus" size={18} /> Plan selbst anlegen
       </Link>
 
       {plans.length === 0 ? (
@@ -62,16 +63,17 @@ export default function PlansView() {
                     Aktivieren
                   </button>
                 )}
-                <Link to={`/plans/edit/${plan.id}`} className="btn btn-sm grow" style={{ textAlign: 'center' }}>
-                  Bearbeiten
+                <Link to={`/plans/edit/${plan.id}`} className="btn btn-sm grow" style={{ justifyContent: 'center' }}>
+                  <Icon name="pencil" size={16} /> Bearbeiten
                 </Link>
                 <button
-                  className="btn btn-sm btn-ghost btn-danger"
+                  className="btn btn-sm btn-icon btn-ghost btn-danger"
+                  aria-label="Löschen"
                   onClick={() => {
                     if (confirm(`Plan "${plan.name}" wirklich löschen?`)) removePlan(plan.id)
                   }}
                 >
-                  Löschen
+                  <Icon name="trash" size={17} />
                 </button>
               </div>
             </div>

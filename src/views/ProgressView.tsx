@@ -25,7 +25,7 @@ export default function ProgressView() {
   const delta = latest && first ? latest.weight - first.weight : 0
 
   return (
-    <div>
+    <div className="view">
       <h1 className="view-title">Progression</h1>
 
       {names.length === 0 ? (

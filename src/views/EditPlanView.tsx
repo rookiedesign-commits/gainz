@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { uid } from '../lib/id'
+import { Icon } from '../components/Icon'
 import type { Exercise, Plan, TrainingDay } from '../types'
 
 const WD = [
@@ -107,7 +108,7 @@ export default function EditPlanView() {
   }
 
   return (
-    <div>
+    <div className="view">
       <h1 className="view-title">{isNew ? 'Neuer Plan' : 'Plan bearbeiten'}</h1>
 
       <div className="glass glass-card">
@@ -125,7 +126,9 @@ export default function EditPlanView() {
             <input className="field grow" value={day.name} placeholder={`Tag ${di + 1} (z.B. Core A)`}
               onChange={(e) => patchDay(day.id, { name: e.target.value })} />
             {plan.days.length > 1 && (
-              <button className="btn btn-sm btn-ghost btn-danger" onClick={() => removeDay(day.id)}>✕</button>
+              <button className="btn btn-sm btn-icon btn-ghost btn-danger" aria-label="Tag entfernen" onClick={() => removeDay(day.id)}>
+                <Icon name="close" size={18} />
+              </button>
             )}
           </div>
 
@@ -148,7 +151,9 @@ export default function EditPlanView() {
                   <input className="field grow" value={ex.name} placeholder="Übung"
                     onChange={(e) => patchEx(day.id, ex.id, { name: e.target.value })} />
                   {day.exercises.length > 1 && (
-                    <button className="btn btn-sm btn-ghost btn-danger" onClick={() => removeEx(day.id, ex.id)}>✕</button>
+                    <button className="btn btn-sm btn-icon btn-ghost btn-danger" aria-label="Übung entfernen" onClick={() => removeEx(day.id, ex.id)}>
+                      <Icon name="close" size={18} />
+                    </button>
                   )}
                 </div>
                 <div className="row" style={{ gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
@@ -178,12 +183,14 @@ export default function EditPlanView() {
           </div>
 
           <button className="btn btn-sm btn-block" style={{ marginTop: 12 }} onClick={() => addEx(day.id)}>
-            + Übung
+            <Icon name="plus" size={16} /> Übung
           </button>
         </div>
       ))}
 
-      <button className="btn btn-block" style={{ marginBottom: 14 }} onClick={addDay}>+ Trainingstag</button>
+      <button className="btn btn-block" style={{ marginBottom: 14 }} onClick={addDay}>
+        <Icon name="plus" size={17} /> Trainingstag
+      </button>
 
       {error && (
         <div className="glass glass-card" style={{ borderColor: 'var(--danger)' }}>
@@ -193,7 +200,7 @@ export default function EditPlanView() {
 
       <div className="row" style={{ gap: 10 }}>
         <button className="btn btn-ghost grow" onClick={() => navigate('/plans')}>Abbrechen</button>
-        <button className="btn btn-primary grow" onClick={save}>Speichern</button>
+        <button className="btn btn-primary grow" onClick={save}><Icon name="check" size={18} /> Speichern</button>
       </div>
     </div>
   )

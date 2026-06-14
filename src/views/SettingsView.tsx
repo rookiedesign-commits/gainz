@@ -2,6 +2,7 @@ import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore, snapshot } from '../store/useStore'
 import { uid } from '../lib/id'
+import { Icon } from '../components/Icon'
 import type { Plan, ThemeMode } from '../types'
 
 export default function SettingsView() {
@@ -64,7 +65,7 @@ export default function SettingsView() {
         if (!data || !Array.isArray(data.plans)) throw new Error('Falsches Format')
         if (confirm('Backup laden? Deine aktuellen Daten werden ersetzt.')) {
           replaceAll(data)
-          setMsg('✓ Backup geladen.')
+          setMsg('Backup geladen.')
         }
       } catch {
         setMsg('Konnte die Datei nicht lesen (kein gültiges Backup).')
@@ -81,7 +82,7 @@ export default function SettingsView() {
   ]
 
   return (
-    <div>
+    <div className="view">
       <h1 className="view-title">Mehr</h1>
 
       <div className="section-label">Darstellung</div>
@@ -134,9 +135,11 @@ export default function SettingsView() {
           besonders bevor du Safari-Daten löschst.
         </p>
         <div className="row" style={{ gap: 10 }}>
-          <button className="btn btn-sm grow" onClick={exportData}>⬇️ Exportieren</button>
-          <label className="btn btn-sm grow" style={{ position: 'relative', overflow: 'hidden' }}>
-            ⬆️ Importieren
+          <button className="btn btn-sm grow" style={{ justifyContent: 'center' }} onClick={exportData}>
+            <Icon name="download" size={17} /> Exportieren
+          </button>
+          <label className="btn btn-sm grow" style={{ position: 'relative', overflow: 'hidden', justifyContent: 'center' }}>
+            <Icon name="upload" size={17} /> Importieren
             <input ref={fileRef} type="file" accept="application/json,.json" onChange={importData}
               style={{ position: 'absolute', inset: 0, opacity: 0 }} />
           </label>
@@ -150,7 +153,9 @@ export default function SettingsView() {
           Lädt einen Testplan, der an <strong>jedem</strong> Wochentag (also auch heute) trainierbar ist –
           mit kurzer 5-Sekunden-Pause, damit du den Rest-Timer schnell siehst.
         </p>
-        <button className="btn btn-primary btn-block" onClick={loadTestPlan}>🧪 Testplan laden & zu „Heute"</button>
+        <button className="btn btn-primary btn-block" onClick={loadTestPlan}>
+          <Icon name="flask" size={18} /> Testplan laden & zu „Heute"
+        </button>
       </div>
 
       <div className="section-label">Über</div>

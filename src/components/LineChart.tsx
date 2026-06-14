@@ -47,12 +47,12 @@ export function LineChart({ points, unit = '' }: Props) {
       <svg className="chart-svg" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="area" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="var(--accent)" stopOpacity="0" />
+            <stop offset="0%" stopColor="var(--cyan)" stopOpacity="0.35" />
+            <stop offset="100%" stopColor="var(--cyan)" stopOpacity="0" />
           </linearGradient>
           <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="var(--accent)" />
-            <stop offset="100%" stopColor="var(--accent-2)" />
+            <stop offset="0%" stopColor="var(--cyan)" />
+            <stop offset="100%" stopColor="var(--blue)" />
           </linearGradient>
         </defs>
 
@@ -66,10 +66,10 @@ export function LineChart({ points, unit = '' }: Props) {
         ))}
 
         <path d={areaPath} fill="url(#area)" />
-        <path d={linePath} fill="none" stroke="url(#line)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+        <path className="line" d={linePath} fill="none" stroke="url(#line)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
 
         {points.map((p, i) => (
-          <circle key={i} cx={x(i)} cy={y(p.value)} r={i === n - 1 ? 5 : 3} fill="var(--accent-2)" stroke="var(--bg-0)" strokeWidth="1.5" />
+          <circle key={i} cx={x(i)} cy={y(p.value)} r={i === n - 1 ? 5.5 : 3} fill={i === n - 1 ? 'var(--neon)' : 'var(--cyan)'} stroke="var(--bg-0)" strokeWidth="1.5" />
         ))}
 
         {/* Y-Extrema */}

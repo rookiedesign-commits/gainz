@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { buildClaudePrompt, parsePlanJSON } from '../lib/planSchema'
+import { Icon } from '../components/Icon'
+import { Spinner } from '../components/Spinner'
 
 export default function ImportPlanView() {
   const navigate = useNavigate()
@@ -10,6 +12,7 @@ export default function ImportPlanView() {
   const [raw, setRaw] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   const copyPrompt = async () => {
     const prompt = buildClaudePrompt(wish.trim() || 'einen Trainingsplan')
@@ -33,17 +36,22 @@ export default function ImportPlanView() {
 
   const doImport = () => {
     setError(null)
-    const res = parsePlanJSON(raw.trim())
-    if ('error' in res) {
-      setError(res.error)
-      return
-    }
-    addPlan(res.plan)
-    navigate('/plans')
+    setLoading(true)
+    // Kurze Verzögerung, damit Validierung als Lade-Schritt sichtbar wird.
+    setTimeout(() => {
+      const res = parsePlanJSON(raw.trim())
+      if ('error' in res) {
+        setError(res.error)
+        setLoading(false)
+        return
+      }
+      addPlan(res.plan)
+      navigate('/plans')
+    }, 450)
   }
 
   return (
-    <div>
+    <div className="view">
       <h1 className="view-title">Plan importieren</h1>
 
       <div className="glass glass-card">
@@ -59,7 +67,7 @@ export default function ImportPlanView() {
           placeholder="z.B. Core-Limbs-Split, 4× pro Woche"
         />
         <button className="btn btn-primary btn-block" style={{ marginTop: 12 }} onClick={copyPrompt}>
-          {copied ? '✓ Kopiert!' : '📋 Prompt kopieren'}
+          <Icon name={copied ? 'check' : 'copy'} size={18} /> {copied ? 'Kopiert!' : 'Prompt kopieren'}
         </button>
       </div>
 
@@ -72,8 +80,8 @@ export default function ImportPlanView() {
           placeholder='Hier die JSON-Antwort von Claude einfügen { "name": ... }'
         />
         <div className="row" style={{ marginTop: 10, gap: 10 }}>
-          <label className="btn btn-sm grow" style={{ position: 'relative', overflow: 'hidden' }}>
-            📁 Datei wählen
+          <label className="btn btn-sm grow" style={{ position: 'relative', overflow: 'hidden', justifyContent: 'center' }}>
+            <Icon name="file" size={17} /> Datei wählen
             <input
               type="file"
               accept="application/json,.json"
@@ -88,8 +96,8 @@ export default function ImportPlanView() {
             <div className="hint" style={{ marginTop: 4 }}>{error}</div>
           </div>
         )}
-        <button className="btn btn-primary btn-block" style={{ marginTop: 12 }} onClick={doImport} disabled={!raw.trim()}>
-          Plan importieren
+        <button className="btn btn-primary btn-block" style={{ marginTop: 12 }} onClick={doImport} disabled={!raw.trim() || loading}>
+          {loading ? <><Spinner size={18} /> Prüfe …</> : 'Plan importieren'}
         </button>
       </div>
     </div>
