@@ -8,7 +8,10 @@
     <!-- iOS Standalone / Home-Screen -->
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- "black" (statt black-translucent): iOS positioniert die Standalone-Webview
+         unter der Statusbar und füllt bis zum echten Schirmboden. black-translucent
+         schob die Webview nach oben und ließ unten ein ~59px dunkles Band (Bug). -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-title" content="Gainz" />
     <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
     <!-- Headline-Font: Archivo Expanded (breit, modern – nah an Zalando Sans Expanded) -->

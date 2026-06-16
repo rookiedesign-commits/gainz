@@ -82,20 +82,18 @@ a { color: inherit; text-decoration: none; }
 /* App-Shell (Flex-Spalte, voller Viewport): .content füllt und scrollt, die Tab-Leiste
    floatet absolut am unteren Rand der .app (nicht position:fixed -> kein Safari-Toolbar-Bug). */
 .app {
-  /* Browser/Safari: dynamische sichtbare Höhe (100dvh). Im Standalone-PWA misst iOS
-     dvh/svh fälschlich ~59px zu kurz (793 statt 852) -> Content/Leiste erreichen den
-     Schirmboden nicht. Dort liefert nur 100vh/100lvh den echten Schirm (siehe @media). */
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  height: 100dvh;
+  /* Füllt den sichtbaren Viewport; .content scrollt darin, die Tab-Leiste ist fixed.
+     Der echte Schirmboden wird über status-bar-style: black (index.html) erreicht –
+     nicht über CSS-Höhentricks (100vh war im Standalone größer als der sichtbare
+     Bereich -> Leiste landete im unsichtbaren Band). */
+  position: relative;
   max-width: 560px;
   margin: 0 auto;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-@media (display-mode: standalone) {
-  .app { height: 100vh; }
 }
 .content {
   flex: 1 1 auto;
@@ -292,9 +290,9 @@ textarea.note-field {
 }
 
 /* ===== Tab-Bar (nur Icons, gleitende Hinterlegung) ===== */
-/* Browser/Safari: position:fixed am sichtbaren Viewport-Boden (safe-bottom dort 0).
-   Standalone: fixed klebte am zu kurzen Layout-Viewport (793) -> 59px-Lücke darunter.
-   Darum dort absolut am Boden der .app (= 100vh = echter Schirm), siehe @media unten. */
+/* position:fixed am Boden des sichtbaren Viewports; safe-bottom hält Abstand zum
+   Home-Indicator. (Mit status-bar-style: black füllt die Webview bis zum echten
+   Schirmboden, daher kein dunkles Band mehr darunter.) */
 .tabbar {
   position: fixed;
   left: 0; right: 0; bottom: calc(8px + var(--safe-bottom));
@@ -308,12 +306,6 @@ textarea.note-field {
   backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%);
   border-radius: 26px;
   box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-edge);
-}
-@media (display-mode: standalone) {
-  /* relativ zum .app-Boden (100vh = echter Schirm) statt zum kurzen Layout-Viewport.
-     bottom:0 = bündig am Rand, kein dunkler Streifen darunter (Icons sitzen durch das
-     Innen-Padding klar über dem Home-Indicator). */
-  .tabbar { position: absolute; bottom: 0; }
 }
 .tab-indicator {
   position: absolute; top: 8px; bottom: 8px; left: 8px;
