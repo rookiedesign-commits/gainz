@@ -87,6 +87,9 @@ a { color: inherit; text-decoration: none; }
   margin: 0 auto;
   height: 100vh;
   height: 100dvh;
+  /* --app-h wird per JS aus window.innerHeight gesetzt (App.tsx). iOS-Standalone misst
+     100dvh beim (Neu-)Öffnen zu kurz; innerHeight + pageshow/visibilitychange ist robust. */
+  height: var(--app-h, 100dvh);
   display: flex;
   flex-direction: column;
   overflow: hidden;
