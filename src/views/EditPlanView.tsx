@@ -1,5 +1,4 @@
 import { useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { uid } from '../lib/id'
@@ -182,14 +181,9 @@ export default function EditPlanView() {
   return (
     <div className="view">
       <h1 className="view-title">{isNew ? 'Neuer Plan' : 'Plan bearbeiten'}</h1>
-      {/* An body portalen: außerhalb des .view-Containers (dessen Transform-Animation
-          sonst position:fixed bricht) -> wirklich fix am Viewport oben rechts. */}
-      {createPortal(
-        <button className="btn btn-primary btn-sm save-fab" onClick={save}>
-          <Icon name="check" size={18} /> Speichern
-        </button>,
-        document.body
-      )}
+      <button className="btn btn-primary btn-sm save-fab" onClick={save}>
+        <Icon name="check" size={18} /> Speichern
+      </button>
 
       {error && (
         <div className="glass glass-card" style={{ borderColor: 'var(--danger)' }}>
