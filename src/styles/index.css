@@ -82,16 +82,20 @@ a { color: inherit; text-decoration: none; }
 /* App-Shell (Flex-Spalte, voller Viewport): .content füllt und scrollt, die Tab-Leiste
    floatet absolut am unteren Rand der .app (nicht position:fixed -> kein Safari-Toolbar-Bug). */
 .app {
-  /* position:fixed + inset:0 spannt den Shell über den ECHTEN Viewport – exakt
-     derselbe Bezug wie die Tab-Leiste, ganz ohne 100dvh/innerHeight (die iOS im
-     Standalone zu kurz misst -> sonst wird der Content unten abgeschnitten). */
+  /* Browser/Safari: dynamische sichtbare Höhe (100dvh). Im Standalone-PWA misst iOS
+     dvh/svh fälschlich ~59px zu kurz (793 statt 852) -> Content/Leiste erreichen den
+     Schirmboden nicht. Dort liefert nur 100vh/100lvh den echten Schirm (siehe @media). */
   position: fixed;
-  inset: 0;
+  top: 0; left: 0; right: 0;
+  height: 100dvh;
   max-width: 560px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+@media (display-mode: standalone) {
+  .app { height: 100vh; }
 }
 .content {
   flex: 1 1 auto;
@@ -288,14 +292,12 @@ textarea.note-field {
 }
 
 /* ===== Tab-Bar (nur Icons, gleitende Hinterlegung) ===== */
-/* position: fixed = relativ zum ECHTEN Viewport, völlig unabhängig von 100dvh/
-   window.innerHeight (die iOS im Standalone unzuverlässig misst). bottom ist ein
-   fester kleiner Abstand OHNE safe-area: die Glas-Pille darf bis kurz über den
-   Home-Indicator reichen, die Icons sitzen durch das Innen-Padding klar darüber.
-   (Frühere safe-area im bottom drückte die Pille im Standalone ~34px hoch -> Lücke.) */
+/* Browser/Safari: position:fixed am sichtbaren Viewport-Boden (safe-bottom dort 0).
+   Standalone: fixed klebte am zu kurzen Layout-Viewport (793) -> 59px-Lücke darunter.
+   Darum dort absolut am Boden der .app (= 100vh = echter Schirm), siehe @media unten. */
 .tabbar {
   position: fixed;
-  left: 0; right: 0; bottom: 8px;
+  left: 0; right: 0; bottom: calc(8px + var(--safe-bottom));
   margin: 0 auto;
   z-index: 50;
   width: min(440px, calc(100% - 40px));
@@ -306,6 +308,10 @@ textarea.note-field {
   backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%);
   border-radius: 26px;
   box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-edge);
+}
+@media (display-mode: standalone) {
+  /* relativ zum .app-Boden (100vh = echter Schirm) statt zum kurzen Layout-Viewport */
+  .tabbar { position: absolute; }
 }
 .tab-indicator {
   position: absolute; top: 8px; bottom: 8px; left: 8px;
