@@ -82,11 +82,13 @@ a { color: inherit; text-decoration: none; }
 /* App-Shell (Flex-Spalte, voller Viewport): .content füllt und scrollt, die Tab-Leiste
    floatet absolut am unteren Rand der .app (nicht position:fixed -> kein Safari-Toolbar-Bug). */
 .app {
-  position: relative;
+  /* position:fixed + inset:0 spannt den Shell über den ECHTEN Viewport – exakt
+     derselbe Bezug wie die Tab-Leiste, ganz ohne 100dvh/innerHeight (die iOS im
+     Standalone zu kurz misst -> sonst wird der Content unten abgeschnitten). */
+  position: fixed;
+  inset: 0;
   max-width: 560px;
   margin: 0 auto;
-  height: 100vh;
-  height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
