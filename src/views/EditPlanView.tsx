@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { uid } from '../lib/id'
 import { Icon } from '../components/Icon'
+import { AutoGrowTextarea } from '../components/AutoGrowTextarea'
 import type { Exercise, Plan, TrainingDay } from '../types'
 
 const WD = [
@@ -70,8 +71,16 @@ export default function EditPlanView() {
   }
 
   // ---- Übungen per Press-and-Drag umsortieren (Pointer Events, touch-tauglich) ----
+  // Die gezogene Kachel folgt dem Finger (translateY); die anderen weichen mit einer
+  // Lücke aus. Die Reihenfolge wird erst beim Loslassen festgeschrieben.
+  const GAP = 10 // entspricht .stack { gap }
   const rowRefs = useRef(new Map<string, HTMLDivElement>())
-  const [dragId, setDragId] = useState<string | null>(null)
+  const startYRef = useRef(0)
+  // Ursprüngliche Mittelpunkte der Kacheln (zum Drag-Start gemessen).
+  const centersRef = useRef<number[]>([])
+
+  interface DragState { dayId: string; exId: string; fromIndex: number; dy: number; slot: number; overIndex: number }
+  const [drag, setDrag] = useState<DragState | null>(null)
 
   const moveEx = (dayId: string, exId: string, toIndex: number) => {
     setPlan((cur) => ({
@@ -88,27 +97,47 @@ export default function EditPlanView() {
     }))
   }
 
-  const onHandleDown = (e: React.PointerEvent, exId: string) => {
+  const onHandleDown = (e: React.PointerEvent, day: TrainingDay, exId: string, index: number) => {
     e.preventDefault()
     ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
-    setDragId(exId)
+    const rects = day.exercises.map((ex) => rowRefs.current.get(ex.id)?.getBoundingClientRect())
+    centersRef.current = rects.map((r) => (r ? r.top + r.height / 2 : 0))
+    startYRef.current = e.clientY
+    const h = rects[index]?.height ?? 0
+    setDrag({ dayId: day.id, exId, fromIndex: index, dy: 0, slot: h + GAP, overIndex: index })
   }
-  const onHandleMove = (e: React.PointerEvent, day: TrainingDay, exId: string) => {
-    if (dragId !== exId) return
-    const y = e.clientY
-    // Ziel-Index = erstes Element, dessen vertikale Mitte unter dem Finger liegt.
-    let target = day.exercises.length - 1
-    for (let i = 0; i < day.exercises.length; i++) {
-      const node = rowRefs.current.get(day.exercises[i].id)
-      if (!node) continue
-      const r = node.getBoundingClientRect()
-      if (y < r.top + r.height / 2) { target = i; break }
-    }
-    moveEx(day.id, exId, target)
+  const onHandleMove = (e: React.PointerEvent, exId: string) => {
+    setDrag((cur) => {
+      if (!cur || cur.exId !== exId) return cur
+      const dy = e.clientY - startYRef.current
+      const draggedCenter = centersRef.current[cur.fromIndex] + dy
+      // Ziel-Index = Anzahl anderer Kacheln, deren Mitte oberhalb der gezogenen liegt.
+      let over = 0
+      for (let i = 0; i < centersRef.current.length; i++) {
+        if (i === cur.fromIndex) continue
+        if (centersRef.current[i] < draggedCenter) over++
+      }
+      return { ...cur, dy, overIndex: over }
+    })
   }
   const onHandleUp = (e: React.PointerEvent, exId: string) => {
-    if (dragId === exId) setDragId(null)
+    setDrag((cur) => {
+      if (cur && cur.exId === exId) moveEx(cur.dayId, cur.exId, cur.overIndex)
+      return null
+    })
     try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId) } catch { /* ignore */ }
+  }
+
+  // Versatz einer Kachel während des Drags (gezogene folgt Finger, andere weichen aus).
+  const dragStyle = (dayId: string, exId: string, index: number): React.CSSProperties => {
+    if (!drag || drag.dayId !== dayId) return {}
+    if (exId === drag.exId) {
+      return { transform: `translateY(${drag.dy}px) scale(1.03)`, zIndex: 10, position: 'relative' }
+    }
+    const { fromIndex, overIndex, slot } = drag
+    if (overIndex > fromIndex && index > fromIndex && index <= overIndex) return { transform: `translateY(${-slot}px)` }
+    if (overIndex < fromIndex && index >= overIndex && index < fromIndex) return { transform: `translateY(${slot}px)` }
+    return {}
   }
 
   const num = (v: string, min: number, max: number, fallback: number) => {
@@ -187,20 +216,20 @@ export default function EditPlanView() {
           <hr className="divider" />
 
           <div className="stack">
-            {day.exercises.map((ex) => (
+            {day.exercises.map((ex, exIndex) => (
               <div
                 key={ex.id}
                 ref={(el) => { if (el) rowRefs.current.set(ex.id, el); else rowRefs.current.delete(ex.id) }}
-                className={`glass ex-edit ${dragId === ex.id ? 'dragging' : ''}`}
-                style={{ padding: 12 }}
+                className={`glass ex-edit ${drag?.exId === ex.id ? 'dragging' : ''}`}
+                style={{ padding: 12, ...dragStyle(day.id, ex.id, exIndex) }}
               >
                 <div className="row">
                   {day.exercises.length > 1 && (
                     <button
                       className="drag-handle"
                       aria-label="Übung verschieben"
-                      onPointerDown={(e) => onHandleDown(e, ex.id)}
-                      onPointerMove={(e) => onHandleMove(e, day, ex.id)}
+                      onPointerDown={(e) => onHandleDown(e, day, ex.id, exIndex)}
+                      onPointerMove={(e) => onHandleMove(e, ex.id)}
                       onPointerUp={(e) => onHandleUp(e, ex.id)}
                       onPointerCancel={(e) => onHandleUp(e, ex.id)}
                     >
@@ -234,7 +263,7 @@ export default function EditPlanView() {
                 </div>
                 <div style={{ marginTop: 10 }}>
                   <span className="input-label" style={{ textAlign: 'left' }}>Notiz</span>
-                  <textarea className="field note-field" value={ex.notes ?? ''} placeholder="z.B. Ausführung, Gewichtssprünge, Erinnerungen …"
+                  <AutoGrowTextarea className="field note-field" value={ex.notes ?? ''} placeholder="z.B. Ausführung, Gewichtssprünge, Erinnerungen …"
                     onChange={(e) => patchEx(day.id, ex.id, { notes: e.target.value })} />
                 </div>
               </div>

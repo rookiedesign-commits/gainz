@@ -8,17 +8,24 @@ type Metric = 'weight' | 'volume'
 export default function ProgressView() {
   const allLogs = useStore((s) => s.logs)
   const activePlanId = useStore((s) => s.activePlanId)
+  const plans = useStore((s) => s.plans)
   // Nur die Progression des aktiven Plans zeigen.
   const logs = useMemo(
     () => allLogs.filter((l) => l.planId === activePlanId),
     [allLogs, activePlanId]
   )
-  const names = useMemo(() => trackedExerciseNames(logs), [logs])
+  // Aktuelle Übungsnamen je ID -> Umbenennungen wirken rückwirkend auf alte Logs.
+  const nameById = useMemo(() => {
+    const m = new Map<string, string>()
+    for (const p of plans) for (const d of p.days) for (const e of d.exercises) m.set(e.id, e.name)
+    return m
+  }, [plans])
+  const names = useMemo(() => trackedExerciseNames(logs, nameById), [logs, nameById])
   const [selected, setSelected] = useState<string | null>(null)
   const [metric, setMetric] = useState<Metric>('weight')
 
   const current = selected && names.includes(selected) ? selected : names[0] ?? null
-  const points = useMemo(() => (current ? progressFor(logs, current) : []), [logs, current])
+  const points = useMemo(() => (current ? progressFor(logs, current, nameById) : []), [logs, current, nameById])
 
   const chartPoints = points.map((p) => ({
     label: shortDate(p.date),

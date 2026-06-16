@@ -1,4 +1,4 @@
-import type { SessionLog } from '../types'
+import type { SessionEntry, SessionLog } from '../types'
 
 export interface ProgressPoint {
   date: string
@@ -8,22 +8,33 @@ export interface ProgressPoint {
   volume: number
 }
 
+/**
+ * Aktueller Anzeigename eines Log-Eintrags: zuerst der heutige Plan-Name (über die
+ * stabile exerciseId), sonst der zum Trainingszeitpunkt gespeicherte Name. Dadurch
+ * wirken Umbenennungen rückwirkend, ohne die Logs zu verändern.
+ */
+function displayName(entry: SessionEntry, nameById?: Map<string, string>): string {
+  return nameById?.get(entry.exerciseId) ?? entry.exerciseName
+}
+
 /** Alle bisher getrackten Übungsnamen (für die Auswahl in der Progressions-Ansicht). */
-export function trackedExerciseNames(logs: SessionLog[]): string[] {
+export function trackedExerciseNames(logs: SessionLog[], nameById?: Map<string, string>): string[] {
   const set = new Set<string>()
   for (const log of logs) {
     for (const e of log.entries) {
-      if (e.weight != null && e.weight > 0) set.add(e.exerciseName)
+      if (e.weight != null && e.weight > 0) set.add(displayName(e, nameById))
     }
   }
   return Array.from(set).sort((a, b) => a.localeCompare(b, 'de'))
 }
 
 /** Zeitreihe für eine Übung (chronologisch, ein Punkt pro Trainingstag). */
-export function progressFor(logs: SessionLog[], exerciseName: string): ProgressPoint[] {
+export function progressFor(logs: SessionLog[], exerciseName: string, nameById?: Map<string, string>): ProgressPoint[] {
   const points: ProgressPoint[] = []
   for (const log of logs) {
-    const entry = log.entries.find((e) => e.exerciseName === exerciseName && e.weight != null && e.weight > 0)
+    const entry = log.entries.find(
+      (e) => displayName(e, nameById) === exerciseName && e.weight != null && e.weight > 0
+    )
     if (!entry) continue
     const weight = entry.weight ?? 0
     const reps = entry.reps ?? 0
