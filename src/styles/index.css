@@ -66,6 +66,9 @@ body {
   -webkit-font-smoothing: antialiased;
   background: var(--bg-0);
   background-image:
+    /* Oberste Ebene: Schwarz -> transparent an der App-Oberkante, damit der Übergang
+       zur opaken schwarzen Statusbar (status-bar-style: black) nahtlos ist. */
+    linear-gradient(to bottom, #000 0, transparent 72px),
     radial-gradient(55% 45% at 12% -5%, rgba(31, 116, 255, 0.42), transparent 60%),
     radial-gradient(50% 40% at 100% 8%, rgba(22, 214, 255, 0.30), transparent 60%),
     radial-gradient(60% 50% at 50% 112%, rgba(227, 255, 57, 0.12), transparent 60%);
