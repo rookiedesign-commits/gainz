@@ -87,9 +87,6 @@ a { color: inherit; text-decoration: none; }
   margin: 0 auto;
   height: 100vh;
   height: 100dvh;
-  /* --app-h wird per JS aus window.innerHeight gesetzt (App.tsx). iOS-Standalone misst
-     100dvh beim (Neu-)Öffnen zu kurz; innerHeight + pageshow/visibilitychange ist robust. */
-  height: var(--app-h, 100dvh);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -289,12 +286,14 @@ textarea.note-field {
 }
 
 /* ===== Tab-Bar (nur Icons, gleitende Hinterlegung) ===== */
-/* position: fixed an den ECHTEN unteren Viewport-Rand. In der Standalone-App pinnt das
-   an den tatsächlichen Bildschirmboden – unabhängig davon, dass 100dvh dort zu kurz
-   gemessen wird (Phantom-Toolbar-Lücke). Content scrollt sichtbar dahinter durch. */
+/* position: fixed = relativ zum ECHTEN Viewport, völlig unabhängig von 100dvh/
+   window.innerHeight (die iOS im Standalone unzuverlässig misst). bottom ist ein
+   fester kleiner Abstand OHNE safe-area: die Glas-Pille darf bis kurz über den
+   Home-Indicator reichen, die Icons sitzen durch das Innen-Padding klar darüber.
+   (Frühere safe-area im bottom drückte die Pille im Standalone ~34px hoch -> Lücke.) */
 .tabbar {
   position: fixed;
-  left: 0; right: 0; bottom: calc(8px + var(--safe-bottom));
+  left: 0; right: 0; bottom: 8px;
   margin: 0 auto;
   z-index: 50;
   width: min(440px, calc(100% - 40px));
@@ -305,14 +304,6 @@ textarea.note-field {
   backdrop-filter: blur(24px) saturate(200%); -webkit-backdrop-filter: blur(24px) saturate(200%);
   border-radius: 26px;
   box-shadow: var(--glass-shadow), inset 0 1px 0 var(--glass-edge);
-}
-/* Standalone-PWA: position:fixed erreicht den echten Viewport-Boden NICHT
-   (iOS lässt eine Phantom-Toolbar-Lücke ≈ Safari-Bottombar). Darum hier absolut
-   am Boden der .app verankern – die ist exakt 100dvh, was im Standalone (keine
-   dynamische Toolbar) der vollen Bildschirmhöhe entspricht. In Safari bleibt fixed,
-   weil das dort mit der ein-/ausfahrenden Toolbar korrekt mitläuft. */
-@media (display-mode: standalone) {
-  .tabbar { position: absolute; }
 }
 .tab-indicator {
   position: absolute; top: 8px; bottom: 8px; left: 8px;

@@ -15,8 +15,8 @@ export function TabBar() {
     tabs.findIndex((t) => (t.to === '/' ? pathname === '/' : pathname.startsWith(t.to)))
   )
 
-  // Position via CSS: fixed in Safari (läuft mit der dynamischen Toolbar mit),
-  // absolut am .app-Boden im Standalone-PWA (siehe @media display-mode: standalone in index.css).
+  // Position via CSS: position:fixed am echten Viewport-Boden (bottom:8px), identisch
+  // in Safari und Standalone-PWA – keine Höhenmessung (dvh/innerHeight) involviert.
   return (
     <nav className="tabbar">
       <div className="tab-indicator" style={{ transform: `translateX(${activeIndex * 100}%)` }} />

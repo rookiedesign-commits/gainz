@@ -12,34 +12,6 @@ import SettingsView from './views/SettingsView'
 export default function App() {
   const theme = useStore((s) => s.settings.theme)
 
-  // Viewport-Höhe robust setzen: iOS-Standalone misst 100dvh beim (Neu-)Öffnen zu
-  // kurz – die Tab-Leiste hing dann oben, bis ein Scroll einen Reflow auslöste.
-  // window.innerHeight ist verlässlich; bei Wiederöffnen (pageshow/visibilitychange)
-  // neu messen, weil der Wert beim Foregrounding zunächst stale sein kann (rAF + Delay).
-  useEffect(() => {
-    const root = document.documentElement
-    const setH = () => root.style.setProperty('--app-h', window.innerHeight + 'px')
-    const recompute = () => {
-      setH()
-      requestAnimationFrame(setH)
-      setTimeout(setH, 300)
-    }
-    recompute()
-    const onVisible = () => {
-      if (!document.hidden) recompute()
-    }
-    window.addEventListener('resize', setH)
-    window.addEventListener('orientationchange', recompute)
-    window.addEventListener('pageshow', recompute)
-    document.addEventListener('visibilitychange', onVisible)
-    return () => {
-      window.removeEventListener('resize', setH)
-      window.removeEventListener('orientationchange', recompute)
-      window.removeEventListener('pageshow', recompute)
-      document.removeEventListener('visibilitychange', onVisible)
-    }
-  }, [])
-
   // Theme auf <html> anwenden (System folgt prefers-color-scheme).
   useEffect(() => {
     const root = document.documentElement
