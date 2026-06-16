@@ -36,6 +36,9 @@ export function DebugViewport() {
     ['visualVP.h', Math.round(window.visualViewport?.height ?? -1)],
     ['docEl.client', de.clientHeight],
     ['safe-bottom', saiBottom],
+    ['safe-top', ph('sat-probe')],
+    ['vVP.offsetTop', Math.round(window.visualViewport?.offsetTop ?? -1)],
+    ['vVP.pageTop', Math.round(window.visualViewport?.pageTop ?? -1)],
     ['standalone', String((window.navigator as any).standalone)],
     ['displayMode', window.matchMedia('(display-mode: standalone)').matches ? 'standalone' : 'browser'],
     ['.app rectH', app ? Math.round(app.getBoundingClientRect().height) : -1],
@@ -57,6 +60,7 @@ export function DebugViewport() {
   return (
     <>
       <div id="sai-probe" style={{ position: 'fixed', bottom: 0, left: 0, width: 1, height: 'env(safe-area-inset-bottom)', pointerEvents: 'none' }} />
+      <div id="sat-probe" style={{ position: 'fixed', bottom: 0, left: 0, width: 1, height: 'env(safe-area-inset-top)', pointerEvents: 'none' }} />
       <div id="p-vh" style={hiddenProbe('100vh')} />
       <div id="p-dvh" style={hiddenProbe('100dvh')} />
       <div id="p-svh" style={hiddenProbe('100svh')} />
