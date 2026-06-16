@@ -8,7 +8,9 @@ export function AutoGrowTextarea(props: TextareaHTMLAttributes<HTMLTextAreaEleme
     const el = ref.current
     if (!el) return
     el.style.height = 'auto'
-    el.style.height = `${el.scrollHeight}px`
+    // border-box: Rahmenhöhe mit einrechnen, sonst wird der Inhalt minimal beschnitten.
+    const border = el.offsetHeight - el.clientHeight
+    el.style.height = `${el.scrollHeight + border}px`
   }
 
   // Bei jedem Wertwechsel (auch initial) neu anpassen.

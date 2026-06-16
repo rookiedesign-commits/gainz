@@ -105,6 +105,17 @@ a { color: inherit; text-decoration: none; }
   font-size: 27px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.05;
   margin: 10px 4px 18px;
 }
+
+/* Sticky-Kopf (z.B. Plan-Editor): Titel + fixer Speichern-Button, bleibt beim Scrollen oben. */
+.edit-header {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  /* volle Breite (Content hat 16px Innenabstand) – nichts scheint seitlich durch */
+  margin: 0 -16px 10px; padding: 8px 16px 10px;
+  background: color-mix(in srgb, var(--bg-0) 72%, transparent);
+  backdrop-filter: blur(16px) saturate(180%); -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+.edit-header .view-title { margin: 0; }
 .section-label {
   font-size: 12px; font-weight: 700; color: var(--text-dim);
   text-transform: uppercase; letter-spacing: 0.08em; margin: 22px 6px 8px;
@@ -221,12 +232,13 @@ textarea.field { resize: vertical; min-height: 120px; font-family: ui-monospace,
 .input-label { font-size: 11px; color: var(--text-dim); display: block; text-align: center; margin-bottom: 3px; }
 
 /* Notizfeld pro Übung: unter den Zahlenfeldern, normale Schrift (kein Mono),
-   wächst per JS mit dem Inhalt -> keine feste Höhe, kein internes Scrollen. */
-.note-field {
+   wächst per JS mit dem Inhalt -> keine feste Höhe, kein internes Scrollen.
+   Selektor mit textarea, um min-height/font aus `textarea.field` zu überschreiben. */
+textarea.note-field {
   font-family: inherit;
   font-size: 14px;
   padding: 10px 12px;
-  min-height: 0;
+  min-height: 44px;
   line-height: 1.4;
   resize: none;
   overflow: hidden;
@@ -237,6 +249,13 @@ textarea.field { resize: vertical; min-height: 120px; font-family: ui-monospace,
 .ex-edit { transition: transform 0.2s var(--ease-spring), box-shadow 0.2s ease; }
 .ex-edit.dragging {
   transition: none;
+  /* Deckende Basis unter dem Glas: überlappende Kacheln/Texte scheinen nicht mehr durch. */
+  background:
+    radial-gradient(130% 90% at 0% 0%, var(--glass-spec), transparent 42%),
+    linear-gradient(135deg, var(--glass-fill-a), var(--glass-fill-b)),
+    var(--bg-1);
+  backdrop-filter: blur(18px) saturate(190%);
+  -webkit-backdrop-filter: blur(18px) saturate(190%);
   box-shadow: var(--glass-shadow), inset 0 0 0 1.6px var(--action), 0 16px 36px rgba(0, 8, 24, 0.55);
   touch-action: none;
 }

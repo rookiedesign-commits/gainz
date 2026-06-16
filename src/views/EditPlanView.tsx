@@ -180,7 +180,16 @@ export default function EditPlanView() {
 
   return (
     <div className="view">
-      <h1 className="view-title">{isNew ? 'Neuer Plan' : 'Plan bearbeiten'}</h1>
+      <div className="edit-header">
+        <h1 className="view-title">{isNew ? 'Neuer Plan' : 'Plan bearbeiten'}</h1>
+        <button className="btn btn-primary btn-sm" onClick={save}><Icon name="check" size={18} /> Speichern</button>
+      </div>
+
+      {error && (
+        <div className="glass glass-card" style={{ borderColor: 'var(--danger)' }}>
+          <span style={{ color: 'var(--danger)' }}>{error}</span>
+        </div>
+      )}
 
       <div className="glass glass-card">
         <span className="input-label" style={{ textAlign: 'left' }}>Name</span>
@@ -279,17 +288,6 @@ export default function EditPlanView() {
       <button className="btn btn-block" style={{ marginBottom: 14 }} onClick={addDay}>
         <Icon name="plus" size={17} /> Trainingstag
       </button>
-
-      {error && (
-        <div className="glass glass-card" style={{ borderColor: 'var(--danger)' }}>
-          <span style={{ color: 'var(--danger)' }}>{error}</span>
-        </div>
-      )}
-
-      <div className="row" style={{ gap: 10 }}>
-        <button className="btn btn-ghost grow" onClick={() => navigate('/plans')}>Abbrechen</button>
-        <button className="btn btn-primary grow" onClick={save}><Icon name="check" size={18} /> Speichern</button>
-      </div>
     </div>
   )
 }
