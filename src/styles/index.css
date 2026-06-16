@@ -86,7 +86,6 @@ a { color: inherit; text-decoration: none; }
   margin: 0 auto;
   height: 100vh;
   height: 100dvh;
-  height: var(--app-h, 100dvh); /* JS-gemessene echte Höhe (iOS-zuverlässig) */
   overflow: hidden;
 }
 .content {
@@ -278,10 +277,11 @@ textarea.note-field {
 }
 
 /* ===== Tab-Bar (nur Icons, gleitende Hinterlegung) ===== */
-/* Schwebt als Glas-Pille absolut über dem Inhalt – ohne eigene flächige Hinterlegung;
-   der Content scrollt sichtbar dahinter durch. */
+/* Schwebt als Glas-Pille über dem Inhalt – fix am echten unteren Viewport-Rand
+   (position: fixed, daher unabhängig von iOS-Höhenfehlschätzungen); Content scrollt
+   sichtbar dahinter durch. Seiten-Scroll ist gesperrt, also kein Springen. */
 .tabbar {
-  position: absolute;
+  position: fixed;
   left: 0; right: 0; bottom: calc(8px + var(--safe-bottom));
   margin: 0 auto;
   z-index: 50;

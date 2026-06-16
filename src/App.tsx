@@ -12,22 +12,6 @@ import SettingsView from './views/SettingsView'
 export default function App() {
   const theme = useStore((s) => s.settings.theme)
 
-  // Echte sichtbare Höhe als CSS-Var setzen. iOS schätzt 100dvh/100vh im
-  // Standalone-Modus teils falsch -> window.innerHeight ist zuverlässig.
-  useEffect(() => {
-    const setH = () =>
-      document.documentElement.style.setProperty('--app-h', `${window.innerHeight}px`)
-    setH()
-    window.addEventListener('resize', setH)
-    window.addEventListener('orientationchange', setH)
-    window.visualViewport?.addEventListener('resize', setH)
-    return () => {
-      window.removeEventListener('resize', setH)
-      window.removeEventListener('orientationchange', setH)
-      window.visualViewport?.removeEventListener('resize', setH)
-    }
-  }, [])
-
   // Theme auf <html> anwenden (System folgt prefers-color-scheme).
   useEffect(() => {
     const root = document.documentElement
