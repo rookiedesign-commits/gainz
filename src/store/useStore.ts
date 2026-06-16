@@ -70,13 +70,31 @@ export const useStore = create<StoreState>()(
         })),
 
       updatePlan: (plan) =>
-        set((s) => ({
-          plans: s.plans.map((p) => (p.id === plan.id ? plan : p)),
-          // Beim Bearbeiten des aktiven Plans Tageszeiger/Entwurf zurücksetzen,
-          // damit "Heute" wieder konsistent zur neuen Tagesreihenfolge ist.
-          schedulePointer: plan.id === s.activePlanId ? 0 : s.schedulePointer,
-          draft: plan.id === s.activePlanId ? null : s.draft,
-        })),
+        set((s) => {
+          // Umbenannte Übungen rückwirkend in die Logs übernehmen (Progression läuft über
+          // exerciseName). Zuordnung über die stabile exerciseId.
+          const nameById = new Map<string, string>()
+          for (const day of plan.days) for (const ex of day.exercises) nameById.set(ex.id, ex.name)
+          const logs = s.logs.map((log) =>
+            log.planId !== plan.id
+              ? log
+              : {
+                  ...log,
+                  entries: log.entries.map((e) => {
+                    const name = nameById.get(e.exerciseId)
+                    return name && name !== e.exerciseName ? { ...e, exerciseName: name } : e
+                  }),
+                }
+          )
+          return {
+            plans: s.plans.map((p) => (p.id === plan.id ? plan : p)),
+            logs,
+            // Beim Bearbeiten des aktiven Plans Tageszeiger/Entwurf zurücksetzen,
+            // damit "Heute" wieder konsistent zur neuen Tagesreihenfolge ist.
+            schedulePointer: plan.id === s.activePlanId ? 0 : s.schedulePointer,
+            draft: plan.id === s.activePlanId ? null : s.draft,
+          }
+        }),
 
       removePlan: (id) =>
         set((s) => {

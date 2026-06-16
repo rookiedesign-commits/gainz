@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useStore } from '../store/useStore'
 import { uid } from '../lib/id'
@@ -67,6 +67,48 @@ export default function EditPlanView() {
   const removeEx = (dayId: string, exId: string) => {
     const day = plan.days.find((d) => d.id === dayId)!
     patchDay(dayId, { exercises: day.exercises.filter((e) => e.id !== exId) })
+  }
+
+  // ---- Übungen per Press-and-Drag umsortieren (Pointer Events, touch-tauglich) ----
+  const rowRefs = useRef(new Map<string, HTMLDivElement>())
+  const [dragId, setDragId] = useState<string | null>(null)
+
+  const moveEx = (dayId: string, exId: string, toIndex: number) => {
+    setPlan((cur) => ({
+      ...cur,
+      days: cur.days.map((d) => {
+        if (d.id !== dayId) return d
+        const from = d.exercises.findIndex((e) => e.id === exId)
+        if (from === -1 || toIndex === from) return d
+        const next = [...d.exercises]
+        const [item] = next.splice(from, 1)
+        next.splice(toIndex, 0, item)
+        return { ...d, exercises: next }
+      }),
+    }))
+  }
+
+  const onHandleDown = (e: React.PointerEvent, exId: string) => {
+    e.preventDefault()
+    ;(e.currentTarget as HTMLElement).setPointerCapture(e.pointerId)
+    setDragId(exId)
+  }
+  const onHandleMove = (e: React.PointerEvent, day: TrainingDay, exId: string) => {
+    if (dragId !== exId) return
+    const y = e.clientY
+    // Ziel-Index = erstes Element, dessen vertikale Mitte unter dem Finger liegt.
+    let target = day.exercises.length - 1
+    for (let i = 0; i < day.exercises.length; i++) {
+      const node = rowRefs.current.get(day.exercises[i].id)
+      if (!node) continue
+      const r = node.getBoundingClientRect()
+      if (y < r.top + r.height / 2) { target = i; break }
+    }
+    moveEx(day.id, exId, target)
+  }
+  const onHandleUp = (e: React.PointerEvent, exId: string) => {
+    if (dragId === exId) setDragId(null)
+    try { (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId) } catch { /* ignore */ }
   }
 
   const num = (v: string, min: number, max: number, fallback: number) => {
@@ -146,8 +188,25 @@ export default function EditPlanView() {
 
           <div className="stack">
             {day.exercises.map((ex) => (
-              <div key={ex.id} className="glass" style={{ padding: 12 }}>
+              <div
+                key={ex.id}
+                ref={(el) => { if (el) rowRefs.current.set(ex.id, el); else rowRefs.current.delete(ex.id) }}
+                className={`glass ex-edit ${dragId === ex.id ? 'dragging' : ''}`}
+                style={{ padding: 12 }}
+              >
                 <div className="row">
+                  {day.exercises.length > 1 && (
+                    <button
+                      className="drag-handle"
+                      aria-label="Übung verschieben"
+                      onPointerDown={(e) => onHandleDown(e, ex.id)}
+                      onPointerMove={(e) => onHandleMove(e, day, ex.id)}
+                      onPointerUp={(e) => onHandleUp(e, ex.id)}
+                      onPointerCancel={(e) => onHandleUp(e, ex.id)}
+                    >
+                      <Icon name="grip" size={20} />
+                    </button>
+                  )}
                   <input className="field grow" value={ex.name} placeholder="Übung"
                     onChange={(e) => patchEx(day.id, ex.id, { name: e.target.value })} />
                   {day.exercises.length > 1 && (
@@ -172,11 +231,11 @@ export default function EditPlanView() {
                     <input className="num-field" type="number" inputMode="numeric" value={ex.restSeconds ?? 0}
                       onChange={(e) => patchEx(day.id, ex.id, { restSeconds: num(e.target.value, 0, 900, 120) })} />
                   </div>
-                  <div className="grow">
-                    <span className="input-label" style={{ textAlign: 'left' }}>Notiz</span>
-                    <input className="field" value={ex.notes ?? ''} placeholder="optional"
-                      onChange={(e) => patchEx(day.id, ex.id, { notes: e.target.value })} />
-                  </div>
+                </div>
+                <div style={{ marginTop: 10 }}>
+                  <span className="input-label" style={{ textAlign: 'left' }}>Notiz</span>
+                  <textarea className="field note-field" value={ex.notes ?? ''} placeholder="z.B. Ausführung, Gewichtssprünge, Erinnerungen …"
+                    onChange={(e) => patchEx(day.id, ex.id, { notes: e.target.value })} />
                 </div>
               </div>
             ))}

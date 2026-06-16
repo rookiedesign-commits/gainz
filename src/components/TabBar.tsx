@@ -15,7 +15,7 @@ export function TabBar() {
     tabs.findIndex((t) => (t.to === '/' ? pathname === '/' : pathname.startsWith(t.to)))
   )
 
-  // Fester Teil des App-Shell-Layouts (kein position:fixed) -> kann nicht springen.
+  // Floatet absolut im .app (kein position:fixed/Portal) -> kann nicht springen, Inhalt scrollt dahinter.
   return (
     <nav className="tabbar">
       <div className="tab-indicator" style={{ transform: `translateX(${activeIndex * 100}%)` }} />

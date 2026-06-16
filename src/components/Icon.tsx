@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react'
 export type IconName =
   | 'dumbbell' | 'list' | 'chart' | 'sliders' | 'timer' | 'check' | 'plus'
   | 'close' | 'pencil' | 'trash' | 'download' | 'upload' | 'sparkles'
-  | 'file' | 'flask' | 'chevronLeft' | 'play' | 'info' | 'calendar' | 'copy'
+  | 'file' | 'flask' | 'chevronLeft' | 'play' | 'info' | 'calendar' | 'copy' | 'grip'
 
 const PATHS: Record<IconName, JSX.Element> = {
   dumbbell: <>
@@ -36,6 +36,7 @@ const PATHS: Record<IconName, JSX.Element> = {
   info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 7.6h.01" /></>,
   calendar: <><rect x="4" y="5" width="16" height="16" rx="2" /><path d="M4 9h16M8 3v4M16 3v4" /></>,
   copy: <><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h8" /></>,
+  grip: <><circle cx="9" cy="6" r="1.4" /><circle cx="15" cy="6" r="1.4" /><circle cx="9" cy="12" r="1.4" /><circle cx="15" cy="12" r="1.4" /><circle cx="9" cy="18" r="1.4" /><circle cx="15" cy="18" r="1.4" /></>,
 }
 
 // Gefüllte Varianten (z.B. für aktiven Tab).
