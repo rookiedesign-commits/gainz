@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useStore } from './store/useStore'
 import { TabBar } from './components/TabBar'
-import { DebugViewport } from './components/DebugViewport'
 import TodayView from './views/TodayView'
 import PlansView from './views/PlansView'
 import ImportPlanView from './views/ImportPlanView'
@@ -53,7 +52,6 @@ export default function App() {
         </Routes>
       </main>
       <TabBar />
-      <DebugViewport />
     </div>
   )
 }
