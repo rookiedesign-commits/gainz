@@ -15,7 +15,8 @@ export function TabBar() {
     tabs.findIndex((t) => (t.to === '/' ? pathname === '/' : pathname.startsWith(t.to)))
   )
 
-  // Floatet absolut im .app (kein position:fixed/Portal) -> kann nicht springen, Inhalt scrollt dahinter.
+  // Position via CSS: fixed in Safari (läuft mit der dynamischen Toolbar mit),
+  // absolut am .app-Boden im Standalone-PWA (siehe @media display-mode: standalone in index.css).
   return (
     <nav className="tabbar">
       <div className="tab-indicator" style={{ transform: `translateX(${activeIndex * 100}%)` }} />
